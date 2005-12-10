@@ -2,7 +2,6 @@ swapspace - dynamic swap manager for Linux
 
 http://thaiopensource.org/development/swapspace/
 
-
 What it does for you
 
 This system daemon for the Linux kernel aims to do away with the need for large,
@@ -23,7 +22,10 @@ was originally foreseen, without leaving the same swap space unused and unusable
 during normal operation as is normally the case.
 
 Swapspace is made available for use under the GNU General Public License (GPL).
-See the file COPYING for details.
+See the file COPYING for an open copyright license.
+
+Copyright (C) 2005 Software Industry Promotion Agency (SIPA), Thailand.  Written
+by Jeroen T. Vermeulen <jtv@xs4all.nl>
 
 
 How it compares

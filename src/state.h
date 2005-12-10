@@ -1,6 +1,9 @@
 /*
 This file is part of Swapspace.
 
+Copyright (C) 2005, Software Industry Industry Promotion Agency (SIPA), Thailand
+Written by Jeroen T. Vermeulen <jtv@xs4all.nl>.
+
 Swapspace is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or
