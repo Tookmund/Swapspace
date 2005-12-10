@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:xml="http://www.w3.org/XML/1998/namespace"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   sodipodi:docname="logo.svg"
+   sodipodi:docbase="/home/jtv/proj/swapspace/doc"
+   inkscape:version="0.41"
+   sodipodi:version="0.32"
+   id="svg2"
+   height="297mm"
+   width="210mm">
+  <defs
+     id="defs3">
+    <linearGradient
+       id="linearGradient4372"
+       inkscape:collect="always">
+      <stop
+         id="stop4374"
+         offset="0"
+         style="stop-color:#00ce00;stop-opacity:1;" />
+      <stop
+         id="stop4376"
+         offset="1"
+         style="stop-color:#00ce00;stop-opacity:0;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4364"
+       inkscape:collect="always">
+      <stop
+         id="stop4366"
+         offset="0"
+         style="stop-color:#00ce00;stop-opacity:1;" />
+      <stop
+         id="stop4368"
+         offset="1"
+         style="stop-color:#00ce00;stop-opacity:0;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient2818"
+       inkscape:collect="always">
+      <stop
+         id="stop2820"
+         offset="0"
+         style="stop-color:#000000;stop-opacity:1;" />
+      <stop
+         id="stop2822"
+         offset="1"
+         style="stop-color:#000000;stop-opacity:0;" />
+    </linearGradient>
+    <radialGradient
+       gradientUnits="userSpaceOnUse"
+       r="16.155386"
+       fy="470.51327"
+       fx="149.49388"
+       cy="470.51327"
+       cx="149.49388"
+       gradientTransform="matrix(1.914826,0.000000,0.000000,0.522241,32.00000,-58.00000)"
+       id="radialGradient2824"
+       xlink:href="#linearGradient2818"
+       inkscape:collect="always" />
+    <radialGradient
+       gradientUnits="userSpaceOnUse"
+       r="66.978249"
+       fy="247.66042"
+       fx="120.67035"
+       cy="247.66042"
+       cx="120.67035"
+       gradientTransform="scale(1.264911,0.790569)"
+       id="radialGradient4370"
+       xlink:href="#linearGradient4364"
+       inkscape:collect="always" />
+    <radialGradient
+       gradientUnits="userSpaceOnUse"
+       r="80.344841"
+       fy="237.31415"
+       fx="132.38803"
+       cy="237.31415"
+       cx="132.38803"
+       gradientTransform="scale(1.264911,0.790569)"
+       id="radialGradient4378"
+       xlink:href="#linearGradient4372"
+       inkscape:collect="always" />
+  </defs>
+  <sodipodi:namedview
+     inkscape:window-y="160"
+     inkscape:window-x="313"
+     inkscape:window-height="743"
+     inkscape:window-width="880"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="px"
+     inkscape:cy="720.00000"
+     inkscape:cx="375.00000"
+     inkscape:zoom="1.0000000"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base" />
+  <metadata
+     id="metadata4">
+    <rdf:RDF
+       id="RDF5">
+      <cc:Work
+         id="Work6"
+         rdf:about="">
+        <dc:format
+           id="format7">image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage"
+           id="type9" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <text
+       sodipodi:linespacing="100%"
+       id="text2052"
+       y="175.50504"
+       x="207.42857"
+       style="font-size:20.000000;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:#000000;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:FreeSans;text-anchor:start;writing-mode:lr-tb"
+       xml:space="preserve"><tspan
+         y="175.50504"
+         x="207.42857"
+         id="tspan2054"
+         sodipodi:role="line">swap</tspan></text>
+    <text
+       sodipodi:linespacing="100%"
+       id="text2056"
+       y="191.36218"
+       x="286"
+       style="font-size:22.000000;font-style:oblique;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:url(#radialGradient2824);stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:FreeSans;text-anchor:start;writing-mode:lr-tb"
+       xml:space="preserve"><tspan
+         y="191.36218"
+         x="286.00000"
+         id="tspan2058"
+         sodipodi:role="line">space</tspan></text>
+    <path
+       transform="matrix(1.000000,0.000000,0.000000,0.833333,96.00000,-2.439636)"
+       d="M 180.00000 207.36218 A 46.000000 28.000000 0 1 1  88.000000,207.36218 A 46.000000 28.000000 0 1 1  180.00000 207.36218 z"
+       sodipodi:ry="28.000000"
+       sodipodi:rx="46.000000"
+       sodipodi:cy="207.36218"
+       sodipodi:cx="134.00000"
+       id="path3586"
+       style="fill:none;fill-opacity:1.0000000;fill-rule:nonzero;stroke:url(#radialGradient4378);stroke-width:4.0000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-opacity:1.0000000"
+       sodipodi:type="arc" />
+    <path
+       transform="matrix(2.232651,0.000000,0.000000,1.894113,-36.17521,-207.4054)"
+       d="M 180.00000 207.36218 A 46.000000 28.000000 0 1 1  88.000000,207.36218 A 46.000000 28.000000 0 1 1  180.00000 207.36218 z"
+       sodipodi:ry="28.000000"
+       sodipodi:rx="46.000000"
+       sodipodi:cy="207.36218"
+       sodipodi:cx="134.00000"
+       id="path4362"
+       style="fill:none;fill-opacity:1.0000000;fill-rule:nonzero;stroke:url(#radialGradient4370);stroke-width:4.0000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-opacity:1.0000000"
+       sodipodi:type="arc" />
+  </g>
+</svg>

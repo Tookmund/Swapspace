@@ -1,0 +1,17 @@
+digraph
+{
+  steady;
+  hungry;
+  diet;
+  overweight;
+
+  steady -> hungry;
+  steady -> overweight;
+  hungry -> hungry;
+  hungry -> steady;
+  hungry -> diet;
+  overweight -> steady;
+  diet -> diet;
+  diet -> steady;
+}
+

@@ -1,0 +1,161 @@
+swapspace - dynamic swap manager for Linux
+
+http://thaiopensource.org/development/swapspace/
+
+
+What it does for you
+
+This system daemon for the Linux kernel aims to do away with the need for large,
+fixed swap partitions or swap files.
+
+When installing a Linux-based system (invariably GNU/Linux) with swapspace, the
+usual swap partition can be omitted, or it can be kept quite small.  Whenever
+swapspace finds, during normal system usage, that more virtual memory is needed,
+it will automatically claim space from the hard disk.  Conversely, swap space
+that is no longer needed is freed up again for regular use by the filesystem.
+
+This means that with swapspace installed, sizing the system's available swap
+space during installation is no longer a life-or-death choice.  It now becomes
+practical to run GNU/Linux off just a single, big partition--with no disk space
+lost to regrettable installation choices.  The system should also be able to
+handle the occasional memory-intensive task that takes much more swap space than
+was originally foreseen, without leaving the same swap space unused and unusable
+during normal operation as is normally the case.
+
+Swapspace is made available for use under the GNU General Public License (GPL).
+See the file COPYING for details.
+
+
+How it compares
+
+Unlike similar programs such as dynswapd and the older (and more portable)
+swapd, swapspace also adapts the sizes of the swap files it creates to meet
+demand.  This means it is less dependent on limits that the kernel may impose on
+the total number of swapfiles, while reducing the need for manual configuration.
+If the daemon finds that more and more swap files are needed, it will start
+creating larger ones to anticipate demand.  While demand for swap files is
+modest, it will stick to smaller ones that can be initialized more quickly and
+so respond more fluently to present requirements.
+
+Robustness and user-friendliness are the first priorities in developing this
+program.  For example, all alternatives we looked at perversely needed to
+allocate multiple chunks of memory in dealing with low-memory situations;
+allocation failure would typically crash these programs.  It turned out that
+none of these allocations were really necessary, and swapspace manages to avoid
+them categorically.  This kills two birds with one stone when it comes to
+reliability: (i) the program doesn't ask for memory just when the least memory
+is available and (ii) it eliminates one of the most important causes of
+programming bugs as a risk factor.
+
+User-friendliness primarily means that no silly questions are asked of the user.
+The daemon tries to be sensible and figure out what is needed at runtime, by
+itself, and without user intervention.  You should not have any need to learn
+about the configuration parameters, or tweak them.  They exist mostly for
+development purposes.
+
+The swapspace daemon has been in production use for several months on various
+32-bit architectures before it was first released to the public, and has been
+tested with swapfiles larger than can be addressed in 32 bits.
+
+Swapspace itself is a small program: about 50 kilobytes on my system--or even
+less in a special version that only accepts the most basic configuration options
+and ignores its configuration file.  On top of that it allocates no memory at
+runtime (although the system will allocate some, of course) and does not use
+much stack space.
+
+
+When not to use it
+
+In its current form, swapspace is probably not a good choice for systems that
+need to remain responsive at all times; depending on the system and the
+cicrumstances, the creation a large new swapfile can take as long as half a
+minute and occupy quite a lot of the system's attention.  The program minimizes
+the number of times swapfiles are created, but it wouldn't be very useful if it
+never created any swapfiles at all!
+
+We are hoping to bring further improvements in the future.  Since the problem
+appears to be caused mostly by system code, however, it's hard to be sure that
+this is really possible.  It may turn out to be possible for the kernel, with
+some modifications, to extend an existing swapfile while it is already in use.
+That would probably help a great deal, but we don't know at the moment how much
+work it would take.
+
+
+Where to start
+
+The program is available both as a source archive and as a Debian package built
+from that same source archive.
+
+To build and install from source, enter the main swapspace source directory and
+run "make".  Some editing of the Makefile may, but generally shouldn't, be
+required as long as gcc is used as the C compiler.  The program code is written
+in standard C99 (the 1999 edition of the C standard), plus one POSIX extension.
+The easiest mode of installation is by running "make install" with root
+privileges.
+
+See the provided manpage for details on how to run swapspace for troubleshooting
+or debugging purposes.  A sample configuration file is also provided, but the
+average user should not need to take an interest.  An init script is provided to
+start and stop swapspace as a regular system service.
+
+The "make install" procedure installs the init script in /etc/init.d, but does
+not currently ensure that swapspace is run on system startup.
+
+
+Technical details: Installation
+
+The installation procedure creates a directory /var/lib/swapspace, which must be
+accessible to the system's superuser (root) only; granting any kind of access
+for this directory to an untrusted user is likely to constitute a serious
+security hole.
+
+According to the Filesystem Hierarchy Standard, other appropriate places for
+this kind of file might be /var/tmp or /var/run.  The former was not deemed
+appropriate because it is accessible to all users, and the latter because most
+system administrators would probably expect it to occupy very little space and
+may confine it to a partition that isn't large enough to hold useful swap space.
+
+Also, files in /var/lib survive reboots whereas those in /var/tmp and /var/run
+need not.  Obviously any data in swap files can be safely erased on reboot (it's
+even tempting to think that that would be safer, though I don't think it really
+is).  But consider a system consistently short on physical memory: during boot,
+swapspace will see the swapfiles left by the previous session, and reinstate
+them immediately at very little cost, ready for use when they are needed.  If
+they had been erased during reboot, swapspace would have to allocate new ones on
+disk when it recognized the need for more virtual memory, which takes much more
+time and resources.
+
+Technical details: Algorithm
+
+Choices of allocation and deallocation are driven by a "finite state machine"
+consisting of four states: steady, hungry, overfed, and diet.  The program will
+alternate through these states as circumstances dictate, applying different
+policies depending on current state.  This was done to achieve a good tradeoff
+between willingness to free up unused swap space on the one hand, and avoidance
+of "thrashing" between deallocation and re-allocation of swapfiles on the other.
+
+For those interested, here is a quick description of these states and their
+associated policies:
+
+Steady - normal operation; no additional swap space is needed, nor do we have
+more than is needed.  However, the program can go into the hungry or overfed
+states at the drop of a hat.
+
+Hungry - more swap space was recently allocated.  The program is willing to
+allocate even more if needed, but it will not consider dropping unneeded swap
+files.  After a certain timeout period, the program reverts to the steady state.
+
+Overfed - significantly more virtual memory is available than is needed.  If
+this situation persists for a certain timeout period, a swapfile is deallocated
+and the program returns to the steady state.
+
+Diet - a recent allocation attempt has run into resource limits, e.g. because
+the filesystem used for swap files was full.  No more swapspace can be allocated
+but excess files can be freed up very rapidly.  Afer timeout, reverts to steady.
+
+State information can be queried by sending the program the SIGUSR1 signal (see
+"man 7 signal" to get the number for your architecture) which will cause it to
+log debug information to the system's daemon log and/or standard output, as
+appropriate.  The program can also be made to log state transitions by starting
+it with the -v or --verbose option.
+

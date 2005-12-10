@@ -1,0 +1,4 @@
+#! /bin/sh
+dpkg-statoverride --update --add root root 0700 /var/lib/swapspace
+#DEBHELPER#
+

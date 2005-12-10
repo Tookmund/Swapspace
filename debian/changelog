@@ -1,0 +1,54 @@
+swapspace (1.5) unstable; urgency=low
+
+  * Redesigned internal state machine; improved corner-case behaviour
+  * Custom signal handlers are now reusable
+  * Signal-triggered stats dump now goes to log if appropriate
+  * New -v|--verbose option logs state transitions and other debug info
+  * Updated documentation
+  * Makefile installs binary as world-executable (and strips it first)
+  * Can be built with most configuration features disabled
+  * Much more extensive dumps of internal state on signal receipt
+  * Add own C/cpp options to those set in environment
+  * New -P|--paranoid option wipes swapfiles after use
+  * More thorough checking of swap path setting
+  * Handles swapfiles being deactivated by third party
+  * Improved handling of kill signals
+  * SIGUSR2 forces algorithm to "diet" state
+  * New -e|--erase option: deallocate all swap files and exit
+  * Checks for sufficient disk space before attempting to create swapfile
+  * Checks swapdir's filesystem size on startup
+  * Rewritten swapfile sizing formula
+  * Cleaned up logging system
+  * Rephrased "meekness" as "elasticity"
+
+ -- Jeroen T. Vermeulen <jtv@sipa.or.th>  Thu, 01 Aug 2005 18:30:00 +0700
+
+swapspace (1.4) unstable; urgency=low
+
+  * Supports Linux 2.4's /proc/meminfo format; no longer requires 2.6 kernel
+  * Only deallocates if enough memory stays free for entire cooldown period
+  * Failure to parse /proc/meminfo is now fatal
+  * New --version option
+  * Additional sanity checking of memory statistics
+
+ -- Jeroen T. Vermeulen <jtv@sipa.or.th>  Thu, 16 June 2005 19:30:00 +0700
+
+swapspace (1.3) unstable; urgency=low
+
+  * Consider part of non-dirty cached memory (and buffers) to be free space
+  * Re-tuned default parameters for new accounting
+  * Unified logging code--it's not pretty, but it's prettier
+  * No longer bother with "negotiable" minimum swapfile sizes
+  * Clarified startup message ("require n extra bytes" to "would prefer []")
+  * Systematic rounding of swap sizes to page size
+  * Pad help output to align long options names vertically
+  * Fix: "smaller than expected" informational message was printed too often
+
+ -- Jeroen T. Vermeulen <jtv@sipa.or.th>  Thu, 26 May 2005 17:00:00 +0700
+
+swapspace (1.2) unstable; urgency=low
+
+  * Initial Debian package.
+
+ -- Jeroen T. Vermeulen <jtv@sipa.or.th>  Fri, 20 May 2005 14:00:00 +0700
+

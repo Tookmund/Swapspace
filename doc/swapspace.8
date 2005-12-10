@@ -1,0 +1,182 @@
+.\" swapspace manpage
+.TH SWAPSPACE 8 "July 2005" "swapspace 1.5" "Linux System Administration"
+.SH NAME
+swapspace \- dynamically manage swap space
+.SH SYNOPSIS
+.B swapspace
+.RI [ options ]
+.SH DESCRIPTION
+.PP
+Monitor memory and swap usage and allocate or deallocate swap space as needed.
+This program aims to reduce or do away with the need for swapfiles.
+.PP
+.B swapspace
+can be built in two configurations: the full-featured one (which is
+now the default) or the unconfigurable version.  The latter only accepts a few
+options, disabling all features that are probably only relevant to developers.
+At some point in the feature, when enough confidence exists that the various
+configuration parameters are either good enough for everyone or have been made
+unnecessary, the unconfigurable build may become the default.
+.PP
+The following options are accepted in the unconfigurable version.  All of these
+have more extensive equivalents in the full-featured version.
+.TP
+\fB\-d\fR
+Quietly ignored; always enabled in unconfigurable version.
+.TP
+\fB\-e\fR
+Attempt to free up all allocated swap files.  Returns 0 if all files were
+successfully erased, or 1 otherwise.
+.TP
+\fB\-h\fR
+Display usage information and exit.
+.TP
+\fB\-p\fR
+Write process identifier to \fI/var/lib/swapspace.pid\fR when starting (and
+delete it when shutting down).  The file's name and location cannot be changed
+in the unconfigurable version.
+.TP
+\fB\-q\fR
+Quietly ignored; always enabled in unconfigurable version.
+.TP
+\fB\-v\fR
+Quietly ignored; always enabled in unconfigurable version.
+.TP
+\fB\-V\fR
+Print program version information and exit.
+.PP
+In most cases, these should be the only options of any interest for normal use
+of the program.  All files are kept in their default locations, which were
+chosen in accordance with the Linux Filesystem Hierarchy Standard, and
+algorithmic parameters are left at defaults that have been tested to work well
+for a wide range of uses.
+.PP
+The full-featured configuration accepts more options, as listed below.
+The long-format options may also be specified, without the leading "\-\-", in a
+configuration file.  By default, \fI/etc/swapspace.conf\fR is read on startup.
+.TP
+\fB\-a\fR \fIduration\fR, \fB\-\-cooldown\fR=\fIduration\fR
+If disk space runs out when allocating a swapfile, wait for \fIduration\fR
+iterations (of roughly one second each) before considering allocating one
+again; or if space doesn't run out, wait for \fIduration\fR iterations before 
+considering deallocating uneeded swapfiles.  This stabilizes the daemon's
+behaviour in the face of varying memory requirements.
+.TP
+\fB\-B\fR \fIp\fR, \fB\-\-buffer_elasticity\fR=\fIp\fR
+Consider \fIp\fR% of system-allocated I/O buffers to be available for other use.
+.TP
+\fB\-c\fR \fIfile\fR, \fB\-\-configfile\fR=\fIfile\fR
+Read \fIfile\fR instead of the default configuration file.
+.TP
+\fB\-C\fR \fIp\fR, \fB\-\-cache_elasticity\fR=\fIp\fR
+Consider \fIp\fR% of filesystem cache to be available for other use.
+.TP
+\fB\-d\fR, \fB\-\-daemon\fR
+Run quietly in the background.  This is the normal way to run the program.
+.TP
+\fB\-e\fR, \fB\-\-erase\fR
+Attempt to free up all allocated swap files.  Returns 0 if all files were
+successfully erased, or 1 otherwise.
+.TP
+\fB\-f\fR \fIp\fR, \fB\-\-freetarget\fR=\fIp\fR
+Aim to have \fIp\fR% of combined memory and swap space free.
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Display usage information and exit.
+.TP
+\fB\-l\fR \fIp\fR, \fB\-\-lower_freelimit\fR=\fIp\fR
+Try to keep at least \fIp\fR% of combined memory and swap space free; if less
+than \fIp\fR percent is available, attempt to allocate more swap space.
+.TP
+\fB\-M\fR \fIsize\fR, \fB\-\-max_swapsize\fR=\fIsize\fR
+Never let swapfiles become larger than \fIsize\fR bytes.  You don't normally
+need to set this; the daemon will learn when its swap files get too big and
+adapt automatically.
+.TP
+\fB\-m\fR \fIsize\fR, \fB\-\-min_swapsize\fR=\fIsize\fR
+Never bother to allocate any swapfiles smaller than \fIsize\fR bytes.  There
+should be no need to change this variable except for testing.
+.TP
+\fB\-p\fR [\fIfile\fR], \fB\-\-pidfile\fR[=\fIfile\fR]
+Write process identifier to \fIfile\fR when starting (and delete \fIfile\fR when
+shutting down); defaults to \fI/var/lib/swapspace.pid\fR.
+.TP
+\fB\-P\fR, \fB\-\-paranoid\fR
+Overwrite retired swapfiles before they are deleted, so an attacker who obtains
+access to the disk without going through the system's access control checks
+(e.g. by unplugging the computer and then rebooting from a CD) cannot retrieve
+the swapped data.  There is no guarantee that this will work, and it will not
+thwart advanced forensic analysis using custom-built hardware; but it may reduce
+the chances of an attacker with physical access to the system obtaining
+passwords, credit card numbers etc.  The program will attempt to free up all
+allocated swapfiles on termination and return a success code for this cleanup,
+as if the \fB\-\-erase\fR had been specified.
+.TP
+\fBCaution\fR
+The \fB\-\-paranoid\fR option will slow down swap file management considerably. 
+In particular, stopping the daemon will cause it to try and deallocate (and
+wipe) all swapfiles it has created, and they will not be available for swapping
+immediately after reboot.
+.TP
+\fB\-q\fR, \fB\-\-quiet\fR
+Suppress informational output.
+.TP
+\fB\-s\fR \fIdir\fR, \fB\-\-swappath\fR=\fIdir\fR
+Create swapfiles in directory \fIdir\fR instead of default location
+\fI/var/lib/swapspace\fR.  This location must be accessible to \fIroot\fR only;
+allowing anyone else to write to this directory or even read swapped data would
+be a \fUserious security breach\fR.
+.TP
+\fB\-u\fR \fIp\fR, \fB\-\-upper_freelimit\fR=\fIp\fR
+Avoid having more than \fIp\fR% of combined memory and swap space free; if this
+percentage is exceeded, try to deallocate swap space.
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR
+Log debug information to system log and/or standard output, as appropriate.
+.TP
+\fB\-V\fR, \fB\-\-version\fR
+Print program version information and exit.
+.PP
+Numbers may be suffixed with \fIk\fR, \fIm\fR, \fIg\fR or \fIt\fR to indicate
+kilobytes, megabytes, gigabytes or terabytes respectively: \fI1k\fR means 1024
+bytes, \fI1m\fR means 1024 kilobytes, \fI4g\fR means 4096 megabytes and so on.
+.PP
+Timings are measured in \fIiterations\fR, which should typically last about one
+second each.  No pretense of accurate timing is made; this is not the kind of
+program you would run on a hard-realtime system.
+.PP
+Any messages are sent to the system daemon log; it is also printed to the
+standard output/error streams (as appropriate based on the urgency of each
+individual message) if available.
+.SH SIGNALS
+State information can be logged by sending the program the \fBSIGUSR1\fR signal
+(user-defined signal 1).  Not all of this information will always be current;
+most of the information internal to \fBswapspace\fR is only updated when needed.
+.PP
+Sending the \fBSIGUSR2\fR signal will make the program free all swapfiles that
+are not currently needed, and abstain from allocating any more for the timespan
+of one cooldown period.  The program will behave as if it just tried to create a
+swapfile but ran out of disk space.
+.SH FILES
+\& /etc/init.d/swapspace
+\& /etc/swapspace.conf
+\& /usr/sbin/swapspace
+\& /var/lib/swapspace/
+.SH AUTHOR
+Written by Jeroen Vermeulen for Software Industry Promotion Agency of Thailand.
+.SH BUGS
+Please report any bugs you may find on the project website at:
+http://thaiopensource.org/development/swapspace/ 
+.SH COPYRIGHT
+Copyright \(co 2005 Software Industry Promotion Agency
+.br
+This is free software; see the source for copying conditions.  There is no
+warranty whatsoever.  Use entirely at your own risk.
+.SH "SEE ALSO"
+.BR kill (1),
+.BR mkswap (8),
+.BR signal (7),
+.BR swapon (2),
+.BR swapoff (2),
+.BR swapon (8),
+.BR swapoff (8)
