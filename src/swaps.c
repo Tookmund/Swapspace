@@ -59,12 +59,12 @@ static size_t swappath_len;
 
 
 /// Smallest allowed swapfile size
-static memsize_t min_swapsize = TRUNC_TO_PAGE(4*MEGA);
+static memsize_t min_swapsize = 4*MEGA;
 /// Largest allowed swapfile size
 /** Don't set this too low.  The program will learn if it runs into file size
  * limits.
  */
-static memsize_t max_swapsize = TRUNC_TO_PAGE(2*TERA);
+static memsize_t max_swapsize = 2*TERA;
 
 
 #ifndef NO_CONFIG

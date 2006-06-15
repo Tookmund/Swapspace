@@ -45,7 +45,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "support.h"
 #include "swaps.h"
 
-char localbuf[8192];
+char localbuf[16384];
 time_t clock = 0;
 
 /// Have we received a kill/HUP/power signal?
@@ -385,6 +385,8 @@ bool swapfs_large_enough(void)
 
 int main(int argc, char *argv[])
 {
+  assert(sizeof(localbuf) >= PAGE_SIZE);
+
   close(STDIN_FILENO);
   setlocale(LC_ALL, "C");
 

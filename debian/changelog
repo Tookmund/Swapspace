@@ -1,3 +1,14 @@
+swapspace (1.6) stable; urgency=low
+
+ * Attempt to free up all swapfiles on uninstall
+ * Compile fixes: PAGE_SIZE is not a constant anymore
+ * Makefile supports dist and distclean targets
+ * Updated to newer version of Debian standards
+ * Documented algorithm as Finite State Machine graph (using graphviz)
+ * Updated copyright notices
+
+ -- Jeroen T. Vermeulen <jtv@thaiopensource.org>  Thu, 15 Jun 2006 16:20:00 +0700
+
 swapspace (1.5) unstable; urgency=low
 
   * Redesigned internal state machine; improved corner-case behaviour

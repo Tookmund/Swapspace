@@ -40,9 +40,10 @@ enum { false=0, true=1 };
  * get its work done under low-memory conditions.  Avoiding dynamic memory
  * allocation (and even wild fluctuations in stack use) may really matter here.
  *
- * Size is best kept to an even multiple of page size.
+ * Size is best kept to an even multiple of page size, and is guaranteed to be
+ * no less than PAGE_SIZE.
  */
-extern char localbuf[PAGE_SIZE*2];
+extern char localbuf[16384];
 
 /// Timestamp counter
 extern time_t clock;
