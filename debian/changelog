@@ -1,3 +1,9 @@
+swapspace (1.7) stable; urgency=low
+
+ * Updated FSF's postal address
+
+ -- Jeroen T. Vermeulen <jtv@thaiopensource.org>  Thu, 15 Jun 2006 16:20:00 +0700
+
 swapspace (1.6) stable; urgency=low
 
  * Attempt to free up all swapfiles on uninstall
