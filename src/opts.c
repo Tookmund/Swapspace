@@ -213,7 +213,7 @@ static char *set_help(long long dummy)
 	pad+ptlen,
 	options[i].name,
 	argproto(i, false),
-	longestopt+2-strlen(options[i].name)-2*strlen(pt),
+	(int)(longestopt+2-strlen(options[i].name)-2*strlen(pt)),
 	"",
 	options[i].desc);
   }
