@@ -66,6 +66,18 @@ static memsize_t min_swapsize = 4*MEGA;
  */
 static memsize_t max_swapsize = 2*TERA;
 
+/// Truncate n to a multiple of memory page size
+static int trunc_to_page(memsize_t n)
+{
+  return n & ~((memsize_t)getpagesize()-1);
+}
+
+/// Round n upwards to multiple of page size
+static int ext_to_page(memsize_t n)
+{
+  return trunc_to_page(n) + getpagesize()-1;
+}
+
 
 #ifndef NO_CONFIG
 char *set_swappath(long long dummy)
@@ -74,12 +86,12 @@ char *set_swappath(long long dummy)
 }
 char *set_min_swapsize(long long size)
 {
-  min_swapsize = TRUNC_TO_PAGE(size);
+  min_swapsize = trunc_to_page(size);
   return NULL;
 }
 char *set_max_swapsize(long long size)
 {
-  max_swapsize = TRUNC_TO_PAGE(size);
+  max_swapsize = trunc_to_page(size);
   return NULL;
 }
 
@@ -96,7 +108,7 @@ char *set_paranoid(long long dummy)
 bool swaps_check_config(void)
 {
   CHECK_CONFIG_ERR(min_swapsize > max_swapsize);
-  CHECK_CONFIG_ERR(min_swapsize < 10*PAGE_SIZE);
+  CHECK_CONFIG_ERR(min_swapsize < 10*getpagesize());
 
   if (swappath[0] != '/')
   {
@@ -318,7 +330,7 @@ static bool enable_swapfile(const char file[])
 static memsize_t write_data(int fd, memsize_t bytes, bool persevere)
 {
   // Round upwards to multiple of page size
-  bytes = EXT_TO_PAGE(bytes);
+  bytes = ext_to_page(bytes);
 
   /* Zero buffer before using it to write data to swapfile.  This doesn't do
    * much for security (if an attacker can get to your swapfiles you don't have
@@ -364,7 +376,7 @@ static memsize_t fill_swapfile(const char file[], int fd, memsize_t size)
       // File too big.  Don't try creating files this large again.
       if (likely(bytes > 0 && max_swapsize > bytes))
       {
-        max_swapsize = TRUNC_TO_PAGE(bytes);
+        max_swapsize = trunc_to_page(bytes);
 #ifndef NO_CONFIG
         if (verbose)
 	  logm(LOG_INFO, "Restricting swapfile size to %lld", (long long)bytes);
@@ -396,9 +408,9 @@ static memsize_t fill_swapfile(const char file[], int fd, memsize_t size)
 static memsize_t make_swapfile(const char file[], memsize_t size)
 {
   assert(min_swapsize <= max_swapsize);
-  assert(max_swapsize == TRUNC_TO_PAGE(max_swapsize));
-  assert(min_swapsize == TRUNC_TO_PAGE(min_swapsize));
-  assert(size == TRUNC_TO_PAGE(size));
+  assert(max_swapsize == trunc_to_page(max_swapsize));
+  assert(min_swapsize == trunc_to_page(min_swapsize));
+  assert(size == trunc_to_page(size));
 
   if (unlikely(size < min_swapsize)) return 0;
 
@@ -601,7 +613,7 @@ static bool get_swapfile_status(FILE *fp, struct swapfile_info *result)
 	      result->seqno,
 	      expected,
 	      found);
-	else if (!quiet && unlikely(found+2*PAGE_SIZE < expected))
+	else if (!quiet && unlikely(found+2*getpagesize() < expected))
 	  log_discrep(LOG_INFO,
 	      "smaller than expected",
 	      result->seqno,
@@ -745,9 +757,10 @@ static int find_free(int last)
 bool alloc_swapfile(memsize_t size)
 {
   /* Round request to page size, then add a bit for swapfile overhead.  Clever
-   * readers will notice that this relies on PAGE_SIZE being a power of two.
+   * readers will notice that this relies on getpagesize() returning a power of
+   * two.
    */
-  size = TRUNC_TO_PAGE(size) + 2*PAGE_SIZE;
+  size = trunc_to_page(size) + 2*getpagesize();
   const int newswap = find_free(sequence_number);
   if (unlikely(swapfiles[newswap].size)) return false;	// No free slot, sorry!
 

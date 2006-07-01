@@ -36,12 +36,6 @@ typedef long long memsize_t;
 /// Singular value for memsize_t, analogous to the null pointer
 #define MEMSIZE_ERROR LLONG_MIN
 
-/// Round (through truncation) a size (in bytes) to multiple of page size
-#define TRUNC_TO_PAGE(n) (((memsize_t)(n)) & ~((memsize_t)PAGE_SIZE-1))
-
-/// Round upwards to multiple of page size
-#define EXT_TO_PAGE(n) (TRUNC_TO_PAGE((n)+PAGE_SIZE-1))
-
 /// Check if we can access memory status etc.  Clobbers localbuf.
 bool check_memory_status(void);
 

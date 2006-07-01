@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include <sys/param.h>
 #include <sys/types.h>
@@ -385,7 +386,7 @@ bool swapfs_large_enough(void)
 
 int main(int argc, char *argv[])
 {
-  assert(sizeof(localbuf) >= PAGE_SIZE);
+  assert(sizeof(localbuf) >= getpagesize());
 
   close(STDIN_FILENO);
   setlocale(LC_ALL, "C");

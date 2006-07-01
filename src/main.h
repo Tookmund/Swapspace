@@ -23,8 +23,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
 #include <sys/param.h>
 
-#include <asm/page.h>
-
 /// I thought C99 had this built in... Maybe I'm doing something wrong.
 typedef int bool;
 enum { false=0, true=1 };
@@ -41,7 +39,7 @@ enum { false=0, true=1 };
  * allocation (and even wild fluctuations in stack use) may really matter here.
  *
  * Size is best kept to an even multiple of page size, and is guaranteed to be
- * no less than PAGE_SIZE.
+ * no less than one page in size.
  */
 extern char localbuf[16384];
 
