@@ -1,7 +1,7 @@
 /*
 This file is part of Swapspace.
 
-Copyright (C) 2005, Software Industry Industry Promotion Agency (SIPA), Thailand
+Copyright (C) 2005,2006, Software Industry Industry Promotion Agency (SIPA)
 Written by Jeroen T. Vermeulen <jtv@xs4all.nl>.
 
 Swapspace is free software; you can redistribute it and/or modify

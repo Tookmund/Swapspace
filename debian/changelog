@@ -1,3 +1,12 @@
+swapspace (1.8) stable; urgency=medium
+
+ * Fixed build error on PowerPC
+ * Cleaned up page-size arithmetic
+ * Fixed unrelated warning in opts.c
+ * Updated copyright notices
+
+ -- Jeroen T. Vermeulen <jtv@thaiopensource.org>  Sat, 01 Jul 2006 14:00:00 +0200
+
 swapspace (1.7) stable; urgency=low
 
  * Updated FSF's postal address
