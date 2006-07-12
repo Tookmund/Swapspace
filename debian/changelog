@@ -9,9 +9,10 @@ swapspace (1.8) stable; urgency=medium
 
 swapspace (1.7) stable; urgency=low
 
- * Updated FSF's postal address
+  * Updated FSF's postal address
+  * Fix for kernel 2.6.17-mm4 by Robert August Vincent II
 
- -- Jeroen T. Vermeulen <jtv@thaiopensource.org>  Thu, 15 Jun 2006 16:20:00 +0700
+ -- Jeroen T. Vermeulen <jtv@thaiopensource.org>  Wed, 12 Jul 2006 18:30:00 +0700
 
 swapspace (1.6) stable; urgency=low
 
