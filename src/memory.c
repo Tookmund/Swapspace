@@ -115,7 +115,7 @@ static bool read_meminfo_item(FILE *fp, struct meminfo_item *result)
 
   char fact[20];
   const int x = sscanf(localbuf,
-      "%s %lld %19s",
+      "%[^:]: %lld %19s",
       result->entry,
       &result->value,
       fact);
@@ -212,31 +212,31 @@ void imbibe_meminfo_entry(const struct meminfo_item *inf, struct memstate *st)
   switch (inf->entry[0])
   {
   case 'B':
-    if (strcmp(inf->entry, "Buffers:")==0)         st->Buffers = inf->value;
+    if (strcmp(inf->entry, "Buffers")==0)         st->Buffers = inf->value;
     break;
   case 'C':
-    if (strcmp(inf->entry, "Cached:")==0)          st->Cached = inf->value;
+    if (strcmp(inf->entry, "Cached")==0)          st->Cached = inf->value;
     break;
   case 'D':
-    if (strcmp(inf->entry, "Dirty:")==0)           st->Dirty = inf->value;
+    if (strcmp(inf->entry, "Dirty")==0)           st->Dirty = inf->value;
     break;
   case 'M':
     if (strncmp(inf->entry,"Mem",3) == 0)
     {
-      if (strcmp(inf->entry+3, "Total:")==0)       st->MemTotal = inf->value;
-      else if (strcmp(inf->entry+3, "Free:")==0)   st->MemFree = inf->value;
+      if (strcmp(inf->entry+3, "Total")==0)       st->MemTotal = inf->value;
+      else if (strcmp(inf->entry+3, "Free")==0)   st->MemFree = inf->value;
     }
     break;
   case 'S':
     if (strncmp(inf->entry,"Swap",4) == 0)
     {
-      if (strcmp(inf->entry+4, "Total:")==0)       st->SwapTotal = inf->value;
-      else if (strcmp(inf->entry+4, "Free:")==0)   st->SwapFree = inf->value;
-      else if (strcmp(inf->entry+4, "Cached:")==0) st->SwapCached = inf->value;
+      if (strcmp(inf->entry+4, "Total")==0)       st->SwapTotal = inf->value;
+      else if (strcmp(inf->entry+4, "Free")==0)   st->SwapFree = inf->value;
+      else if (strcmp(inf->entry+4, "Cached")==0) st->SwapCached = inf->value;
     }
     break;
   case 'W':
-    if (strcmp(inf->entry,"Writeback:")==0)        st->Writeback = inf->value;
+    if (strcmp(inf->entry,"Writeback")==0)        st->Writeback = inf->value;
     break;
   }
 }
