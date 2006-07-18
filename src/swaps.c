@@ -211,7 +211,7 @@ static bool proc_swaps_read_ok = false;
 /// Print status information to stdout
 void dump_stats(void)
 {
-  logm(LOG_INFO, "clock: %lld", (long long)clock);
+  logm(LOG_INFO, "clock: %lld", (long long)runclock);
 
   dump_state();
   dump_memory();
@@ -595,7 +595,7 @@ static bool get_swapfile_status(FILE *fp, struct swapfile_info *result)
 #ifndef NO_CONFIG
 	if (!quiet) logm(LOG_NOTICE, "Detected swapfile '%d'", result->seqno);
 #endif
-	swapfiles[result->seqno].created = clock;
+	swapfiles[result->seqno].created = runclock;
       }
 #ifndef NO_CONFIG
       else if (unlikely(swapfiles[result->seqno].size != result->size))

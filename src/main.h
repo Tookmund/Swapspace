@@ -21,7 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #ifndef SWAPSPACE_MAIN_H
 #define SWAPSPACE_MAIN_H
 
-#include <sys/param.h>
+#include <time.h>
 
 /// I thought C99 had this built in... Maybe I'm doing something wrong.
 typedef int bool;
@@ -44,7 +44,7 @@ enum { false=0, true=1 };
 extern char localbuf[16384];
 
 /// Timestamp counter
-extern time_t clock;
+extern time_t runclock;
 
 /// Is the swapdir on a filesystem large enough for useful swap files?
 /** Also prints a warning if the filesystem is large enough, but does not have

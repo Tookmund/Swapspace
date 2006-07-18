@@ -47,7 +47,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #include "swaps.h"
 
 char localbuf[16384];
-time_t clock = 0;
+time_t runclock = 0;
 
 /// Have we received a kill/HUP/power signal?
 static volatile bool stop = false;
@@ -458,7 +458,7 @@ int main(int argc, char *argv[])
   }
 
   // Central loop
-  for (++clock; !stop; ++clock)
+  for (++runclock; !stop; ++runclock)
   {
     if (print_status)		print_status = false,	dump_stats();
     else if (adjust_swap)	adjust_swap = false,	request_diet();
