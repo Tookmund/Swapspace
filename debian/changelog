@@ -1,3 +1,9 @@
+swapspace (1.9) stable; urgency=medium
+
+  * Fixed for format changes in /proc/meminfo, kernel 2.6.18-mm4 or so
+
+ -- Jeroen T. Vermeulen <jtv@thaiopensource.org>  Tue, 25 Jul 2006 08:25:00 +0700
+
 swapspace (1.8) stable; urgency=medium
 
   * Fixed build error on PowerPC

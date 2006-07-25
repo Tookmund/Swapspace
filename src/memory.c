@@ -120,7 +120,13 @@ static bool read_meminfo_item(FILE *fp, struct meminfo_item *result)
       &result->value,
       fact);
 
-  if (unlikely(x < 3))
+  if (unlikely(x == 2))
+  {
+    // Since Linux 2.6.18-mm4 or so, /proc/meminfo may contain lines without a
+    // unit or "factor" attached.
+    fact[0] = '\0';
+  }
+  else if (unlikely(x < 2))
   {
     result->value = 0;
 
