@@ -1,3 +1,9 @@
+swapspace (1.10) stable; urgency=high
+
+  * Eliminated integer overflows with large swap files
+
+ -- Jeroen T. Vermeulen <jtv@thaiopensource.org>  Wed, 16 Aug 2006 11:00:00 +0700
+
 swapspace (1.9) stable; urgency=medium
 
   * Fixed for format changes in /proc/meminfo, kernel 2.6.18-mm4 or so

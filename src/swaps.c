@@ -67,13 +67,13 @@ static memsize_t min_swapsize = 4*MEGA;
 static memsize_t max_swapsize = 2*TERA;
 
 /// Truncate n to a multiple of memory page size
-static int trunc_to_page(memsize_t n)
+static memsize_t trunc_to_page(memsize_t n)
 {
   return n & ~((memsize_t)getpagesize()-1);
 }
 
 /// Round n upwards to multiple of page size
-static int ext_to_page(memsize_t n)
+static memsize_t ext_to_page(memsize_t n)
 {
   return trunc_to_page(n) + getpagesize()-1;
 }
