@@ -1,7 +1,7 @@
 Source: swapspace
 Section: admin
 Priority: optional
-Maintainer: Jeroen T. Vermeulen <jtv@sipa.or.th>
+Maintainer: Jeroen T. Vermeulen <jtv@pqxx.org>
 Build-Depends: debhelper (>= 4.0.0)
 Standards-Version: 3.6.1.1
 

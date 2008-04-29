@@ -39,7 +39,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
 static const char copyright[] = "\n"
       "Copyright (c) 2004-2005 Software Industry Promotion Agency of Thailand\n"
-      "Written by Jeroen T. Vermeulen <jtv@sipa.or.th>\n"
+      "Written by Jeroen T. Vermeulen <jtv@pqxx.org>\n"
       "This program is free software, and is available for use under the GNU\n"
       "General Public License (GPL).\n";
 
