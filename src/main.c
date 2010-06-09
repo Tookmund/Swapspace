@@ -2,7 +2,8 @@
 This file is part of Swapspace.
 
 Copyright (C) 2005,2006, Software Industry Industry Promotion Agency (SIPA)
-Written by Jeroen T. Vermeulen <jtv@xs4all.nl>.
+Copyright (C) 2010, Jeroen T. Vermeulen
+Written by Jeroen T. Vermeulen.
 
 Swapspace is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -460,9 +461,9 @@ int main(int argc, char *argv[])
   // Central loop
   for (++runclock; !stop; ++runclock)
   {
-    if (print_status)		print_status = false,	dump_stats();
-    else if (adjust_swap)	adjust_swap = false,	request_diet();
-    else 			handle_requirements();
+    if (unlikely(print_status))		print_status = false,	dump_stats();
+    else if (unlikely(adjust_swap))	adjust_swap = false,	request_diet();
+    else 			        handle_requirements();
 
     sleep(1);
   }

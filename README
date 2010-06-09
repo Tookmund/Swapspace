@@ -4,8 +4,8 @@ http://pqxx.org/development/swapspace/
 
 What it does for you
 
-This system daemon for the Linux kernel aims to do away with the need for large,
-fixed swap partitions or swap files.
+This system daemon for the Linux kernel eliminates the need for large, fixed
+swap partitions.
 
 When installing a Linux-based system (invariably GNU/Linux) with swapspace, the
 usual swap partition can be omitted, or it can be kept quite small.  Whenever
@@ -13,41 +13,36 @@ swapspace finds, during normal system usage, that more virtual memory is needed,
 it will automatically claim space from the hard disk.  Conversely, swap space
 that is no longer needed is freed up again for regular use by the filesystem.
 
-This means that with swapspace installed, sizing the system's available swap
-space during installation is no longer a life-or-death choice.  It now becomes
-practical to run GNU/Linux off just a single, big partition--with no disk space
-lost to regrettable installation choices.  The system should also be able to
-handle the occasional memory-intensive task that takes much more swap space than
-was originally foreseen, without leaving the same swap space unused and unusable
-during normal operation as is normally the case.
+This means that sizing the system's swap space is no longer a life-or-death
+choice at installation time.  Now you can run GNU/Linux off just a single, big
+partition--with no disk space lost to regrettable installation choices.  The
+system should also be able to handle the occasional memory-intensive task,
+without eating up disk space that you'll never get back.
 
 Swapspace is made available for use under the GNU General Public License (GPL).
 See the file COPYING for an open copyright license.
 
-Copyright (C) 2005 Software Industry Promotion Agency (SIPA), Thailand.  Written
-by Jeroen T. Vermeulen <jtv@xs4all.nl>
+Copyright (C) 2005, 2006 Software Industry Promotion Agency (SIPA), Thailand.
+Copyright (C) 2010 Jeroen T. Vermeulen.
+Written by Jeroen T. Vermeulen.
 
 
 How it compares
 
 Unlike similar programs such as dynswapd and the older (and more portable)
-swapd, swapspace also adapts the sizes of the swap files it creates to meet
-demand.  This means it is less dependent on limits that the kernel may impose on
-the total number of swapfiles, while reducing the need for manual configuration.
-If the daemon finds that more and more swap files are needed, it will start
-creating larger ones to anticipate demand.  While demand for swap files is
-modest, it will stick to smaller ones that can be initialized more quickly and
-so respond more fluently to present requirements.
+swapd, swapspace also adapts the sizes of the swap files it creates.  This makes
+it less dependent on limits that the kernel may impose on the total number of
+swapfiles.  It also reduces the need for manual configuration.  If the daemon
+finds that more and more swap files are needed, it will start creating larger
+ones to anticipate demand.  But while demand for swap files is modest, it will
+stick to smaller ones that can be initialized more quickly and so respond more
+fluently to present requirements.
 
 Robustness and user-friendliness are the first priorities in developing this
-program.  For example, all alternatives we looked at perversely needed to
-allocate multiple chunks of memory in dealing with low-memory situations;
-allocation failure would typically crash these programs.  It turned out that
-none of these allocations were really necessary, and swapspace manages to avoid
-them categorically.  This kills two birds with one stone when it comes to
-reliability: (i) the program doesn't ask for memory just when the least memory
-is available and (ii) it eliminates one of the most important causes of
-programming bugs as a risk factor.
+program.  In the existing programs we looked at, perversely, the first thing
+that happened when dealing with low-memory situations was to allocate some more
+memory.  Allocation failure would typically crash these programs.  None of these
+allocations were really necessary, and swapspace avoids them categorically.
 
 User-friendliness primarily means that no silly questions are asked of the user.
 The daemon tries to be sensible and figure out what is needed at runtime, by
@@ -62,8 +57,8 @@ tested with swapfiles larger than can be addressed in 32 bits.
 Swapspace itself is a small program: about 50 kilobytes on my system--or even
 less in a special version that only accepts the most basic configuration options
 and ignores its configuration file.  On top of that it allocates no memory at
-runtime (although the system will allocate some, of course) and does not use
-much stack space.
+runtime (although the system will probably allocate some) and does not use much
+stack space.
 
 
 When not to use it
@@ -76,11 +71,10 @@ the number of times swapfiles are created, but it wouldn't be very useful if it
 never created any swapfiles at all!
 
 We are hoping to bring further improvements in the future.  Since the problem
-appears to be caused mostly by system code, however, it's hard to be sure that
-this is really possible.  It may turn out to be possible for the kernel, with
-some modifications, to extend an existing swapfile while it is already in use.
-That would probably help a great deal, but we don't know at the moment how much
-work it would take.
+happens in system code, however, it's hard to solve.  It may turn out to be
+possible for the kernel, with some modifications, to extend an existing swapfile
+while it is already in use.  That would probably help a great deal, but we don't
+know at the moment how much work it would take.
 
 
 Where to start
@@ -126,6 +120,7 @@ them immediately at very little cost, ready for use when they are needed.  If
 they had been erased during reboot, swapspace would have to allocate new ones on
 disk when it recognized the need for more virtual memory, which takes much more
 time and resources.
+
 
 Technical details: Algorithm
 

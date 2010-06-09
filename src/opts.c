@@ -2,7 +2,8 @@
 This file is part of Swapspace.
 
 Copyright (C) 2005,2006, Software Industry Industry Promotion Agency (SIPA)
-Written by Jeroen T. Vermeulen <jtv@xs4all.nl>.
+Copyright (C) 2010, Jeroen T. Vermeulen
+Written by Jeroen T. Vermeulen.
 
 Swapspace is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -38,10 +39,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
 
 static const char copyright[] = "\n"
-      "Copyright (c) 2004-2005 Software Industry Promotion Agency of Thailand\n"
-      "Written by Jeroen T. Vermeulen <jtv@pqxx.org>\n"
+      "Copyright (c) 2004-2006 Software Industry Promotion Agency of Thailand\n"
+      "Copyright (c) 2010 Jeroen T. Vermeulen\n"
+      "Written by Jeroen T. Vermeulen\n"
       "This program is free software, and is available for use under the GNU\n"
-      "General Public License (GPL).\n";
+      "General Public License (GPL).\n"
+      "See http://pqxx.org/development/swapspace\n";
 
 
 #ifndef NO_CONFIG
