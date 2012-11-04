@@ -137,7 +137,7 @@ static bool startpidfile(void)
 {
   assert(pidfd == -1);
   if (!make_pidfile) return true;
-  pidfd = open(pidfile, O_WRONLY|O_CREAT|O_EXCL);
+  pidfd = open(pidfile, O_WRONLY|O_CREAT|O_EXCL, O_WRONLY);
   if (unlikely(pidfd == -1))
   {
     if (errno == EEXIST)
@@ -187,7 +187,7 @@ static bool startpidfile(void)
  * for such accesses that enabled an MMU-based workaround on Alpha systems.  But
  * since these macros were no-ops on Intel x86-compatible processors, device
  * driver writers often failed to use them.  If Linux had hit the big time a bit
- * earlier, DEC
+ * earlier, DEC might have survived.
  *
  * The other reason why these instructions were added were signal handlers.  The
  * idea of vectorizing common loops was great; it was a precursor to today's

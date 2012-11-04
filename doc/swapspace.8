@@ -8,15 +8,12 @@ swapspace \- dynamically manage swap space
 .SH DESCRIPTION
 .PP
 Monitor memory and swap usage and allocate or deallocate swap space as needed.
-This program aims to reduce or do away with the need for swapfiles.
+This program aims to reduce or do away with the need for swap partitions.
 .PP
 .B swapspace
 can be built in two configurations: the full-featured one (which is
 now the default) or the unconfigurable version.  The latter only accepts a few
 options, disabling all features that are probably only relevant to developers.
-At some point in the feature, when enough confidence exists that the various
-configuration parameters are either good enough for everyone or have been made
-unnecessary, the unconfigurable build may become the default.
 .PP
 The following options are accepted in the unconfigurable version.  All of these
 have more extensive equivalents in the full-featured version.
