@@ -1,150 +1,174 @@
+==========================================
 swapspace - dynamic swap manager for Linux
+==========================================
 
-http://pqxx.org/development/swapspace/
+See also
+========
+
+Home page:
+
+    http://pqxx.org/development/swapspace/
+
+You'll find a manual under "doc" in the source tree.  Read it with:
+
+    man -l doc/swapspace.8
+
 
 What it does for you
+====================
 
-This system daemon for the Linux kernel eliminates the need for large, fixed
-swap partitions.
+This is a system daemon for the Linux kernel that eliminates the need for large,
+fixed swap partitions.
 
-When installing a Linux-based system (invariably GNU/Linux) with swapspace, the
-usual swap partition can be omitted, or it can be kept quite small.  Whenever
-swapspace finds, during normal system usage, that more virtual memory is needed,
-it will automatically claim space from the hard disk.  Conversely, swap space
-that is no longer needed is freed up again for regular use by the filesystem.
+Usually when you install a GNU/Linux system, it sets up a swap partition on
+disk.  The swap partition serves as virtual memory, so you may need a lot of it.
+But you can't store data there, so you don't want to sacrifice too much disk
+space.  And it's not always easy, or safe, to change its size afterwards!
 
-This means that sizing the system's swap space is no longer a life-or-death
-choice at installation time.  Now you can run GNU/Linux off just a single, big
-partition--with no disk space lost to regrettable installation choices.  The
-system should also be able to handle the occasional memory-intensive task,
-without eating up disk space that you'll never get back.
+Runnin swapspace solves that problem.  You no longer need a large swap
+partition.  You can even do without the whole thing.  The program manages swap
+files for you.  These work just like partitions, except they're normal files.
+You can add more when you need them, or delete some when you want the disk space
+back.  And that is exactly what swapspace does.  It constantly monitors your
+system's virtual-memory needs and manages a pool of swap files accordingly.
+
+With swapspace you can install GNU/Linux in one single big partition, without
+regrets later about picking the wrong size.  Your system can handle the
+occasional memory-intensive task, without eating up disk space that you'll never
+get back.
 
 Swapspace is made available for use under the GNU General Public License (GPL).
 See the file COPYING for an open copyright license.
 
 Copyright (C) 2005, 2006 Software Industry Promotion Agency (SIPA), Thailand.
-Copyright (C) 2010 Jeroen T. Vermeulen.
+Copyright (C) 2010, 2012 Jeroen T. Vermeulen.
 Written by Jeroen T. Vermeulen.
 
 
 How it compares
+===============
 
-Unlike similar programs such as dynswapd and the older (and more portable)
-swapd, swapspace also adapts the sizes of the swap files it creates.  This makes
-it less dependent on limits that the kernel may impose on the total number of
-swapfiles.  It also reduces the need for manual configuration.  If the daemon
-finds that more and more swap files are needed, it will start creating larger
-ones to anticipate demand.  But while demand for swap files is modest, it will
-stick to smaller ones that can be initialized more quickly and so respond more
-fluently to present requirements.
+There are similar programs out there, such as dynswapd and the older swapd
+(which is more portable).  They had some shortcomings that swapspace avoids.
 
-Robustness and user-friendliness are the first priorities in developing this
-program.  In the existing programs we looked at, perversely, the first thing
-that happened when dealing with low-memory situations was to allocate some more
-memory.  Allocation failure would typically crash these programs.  None of these
-allocations were really necessary, and swapspace avoids them categorically.
+First thing is robustness.  Swap managers go to work when the system is short on
+memory and perversely, they usually start using more memory when they go to
+work.  If there isn't enough available memory, at best they can't help and at
+worst they crash.  That's why swapspace does not allocate any additional memory
+once it's started up.  It doesn't grab a lot of memory on startup either; the
+difference is mostly a matter of different program design.
 
-User-friendliness primarily means that no silly questions are asked of the user.
-The daemon tries to be sensible and figure out what is needed at runtime, by
-itself, and without user intervention.  You should not have any need to learn
-about the configuration parameters, or tweak them.  They exist mostly for
-development purposes.
+Next, swapspace aims to be user-friendly.  No configuration is needed.  The
+daemon tries to figure out what's needed at runtime.  It balances your memory
+needs against disk usage.  It also tries to minimize time lost to writing new
+swap files.  There are knobs you can twiddle, but they're mostly for
+experimentation and development.
+
+There's one twist to other swap managers: swapspace adapts the sizes of the
+swap files it creates.  The Linux kernel may limit the total number of swap
+files, but as you need more, the daemon will create larger and larger ones.
+That way, creating your first swap file only takes a few seconds and won't slow
+down your system much.  As you need more virtual memory, it will start to take
+longer but also give you more space--so it happens less often.
 
 The swapspace daemon has been in production use for several months on various
 32-bit architectures before it was first released to the public, and has been
 tested with swapfiles larger than can be addressed in 32 bits.
 
-Swapspace itself is a small program: about 50 kilobytes on my system--or even
-less in a special version that only accepts the most basic configuration options
-and ignores its configuration file.  On top of that it allocates no memory at
-runtime (although the system will probably allocate some) and does not use much
-stack space.
+Swapspace is a small program: about 50 kilobytes on my system--or even less in a
+special version that only accepts the most basic configuration options and
+ignores its configuration file.  It also needs very little memory for itself.
 
 
 When not to use it
+==================
 
 In its current form, swapspace is probably not a good choice for systems that
-need to remain responsive at all times; depending on the system and the
+need to remain responsive at all times.  Depending on the system and the
 cicrumstances, the creation a large new swapfile can take as long as half a
 minute and occupy quite a lot of the system's attention.  The program minimizes
-the number of times swapfiles are created, but it wouldn't be very useful if it
-never created any swapfiles at all!
+the impact, but it wouldn't be very useful if it never created any swapfiles at
+all!
 
-We are hoping to bring further improvements in the future.  Since the problem
-happens in system code, however, it's hard to solve.  It may turn out to be
-possible for the kernel, with some modifications, to extend an existing swapfile
-while it is already in use.  That would probably help a great deal, but we don't
-know at the moment how much work it would take.
+The slowdown happens in operating-system code, so there isn't much we can do
+about it.  It would help if the kernel were able to extend a swap file that's
+already in use.  But that is of course the price you pay for virtual memory:
+slower but cheaper.  If your system is too slow because there's not enough
+memory, the ultimate answer is still: try to use less or buy more!
 
 
 Where to start
+==============
 
 The program is available both as a source archive and as a Debian package built
-from that same source archive.
+from that same source archive.  But use the package from your system
+distribution if there is one.
 
 To build and install from source, enter the main swapspace source directory and
-run "make".  Some editing of the Makefile may, but generally shouldn't, be
-required as long as gcc is used as the C compiler.  The program code is written
-in standard C99 (the 1999 edition of the C standard), plus one POSIX extension.
-The easiest mode of installation is by running "make install" with root
-privileges.
+run "make".  Some editing of the Makefile may be required if your C compiler is
+not gcc.  The program code is written in standard C99 (the 1999 edition of the C
+standard), plus one POSIX extension.  The easiest mode of installation is by
+running "make install" with root privileges--but again, if your system
+distribution provides a package, it's better to use that instead.
 
-See the provided manpage for details on how to run swapspace for troubleshooting
-or debugging purposes.  A sample configuration file is also provided, but the
-average user should not need to take an interest.  An init script is provided to
-start and stop swapspace as a regular system service.
+See the manpage for details on how to run swapspace for troubleshooting or
+debugging purposes.  A sample configuration file is also provided, but it's safe
+to ignore.  There's also an init script to start and stop swapspace as a regular
+system service, but your system distribution may need things done differently.
 
 The "make install" procedure installs the init script in /etc/init.d, but does
 not currently ensure that swapspace is run on system startup.
 
 
-Technical details: Installation
+Technical details
+=================
+
+Installation
+------------
 
 The installation procedure creates a directory /var/lib/swapspace, which must be
 accessible to the system's superuser (root) only; granting any kind of access
-for this directory to an untrusted user is likely to constitute a serious
-security hole.
+for this directory to an untrusted user constitutes a serious security hole.
 
 According to the Filesystem Hierarchy Standard, other appropriate places for
 this kind of file might be /var/tmp or /var/run.  The former was not deemed
-appropriate because it is accessible to all users, and the latter because most
-system administrators would probably expect it to occupy very little space and
-may confine it to a partition that isn't large enough to hold useful swap space.
+appropriate because it is accessible to all users, and the latter because it's
+meant for very small files.
 
-Also, files in /var/lib survive reboots whereas those in /var/tmp and /var/run
-need not.  Obviously any data in swap files can be safely erased on reboot (it's
-even tempting to think that that would be safer, though I don't think it really
-is).  But consider a system consistently short on physical memory: during boot,
-swapspace will see the swapfiles left by the previous session, and reinstate
-them immediately at very little cost, ready for use when they are needed.  If
-they had been erased during reboot, swapspace would have to allocate new ones on
-disk when it recognized the need for more virtual memory, which takes much more
-time and resources.
+Files in /var/lib survive reboots whereas those in /var/tmp and /var/run need
+not.  Obviously any data in swap files can be safely erased on reboot--it may
+arguably be safer.  But keeping your swap files across reboots means you spend
+less time waiting for swap files that you also needed the last time you used
+your computer.
 
 
-Technical details: Algorithm
+Algorithm
+---------
 
 Choices of allocation and deallocation are driven by a "finite state machine"
 consisting of four states: steady, hungry, overfed, and diet.  The program will
-alternate through these states as circumstances dictate, applying different
-policies depending on current state.  This was done to achieve a good tradeoff
-between willingness to free up unused swap space on the one hand, and avoidance
-of "thrashing" between deallocation and re-allocation of swapfiles on the other.
+move between these states as circumstances dictate, and apply different policies
+depending on the current state.  This is how swapspace manages its tradeoffs
+between the desire to free up unused swap space on the one hand, and on the
+other, the desire to minimize deallocation and re-allocation (or "thrashing") of
+swap files.
 
 For those interested, here is a quick description of these states and their
 associated policies:
 
 Steady - normal operation; no additional swap space is needed, nor do we have
 more than is needed.  However, the program can go into the hungry or overfed
-states at the drop of a hat.
+states depending on memory usage.
 
 Hungry - more swap space was recently allocated.  The program is willing to
-allocate even more if needed, but it will not consider dropping unneeded swap
-files.  After a certain timeout period, the program reverts to the steady state.
+allocate even more if needed, but to avoid thrashing, it's not going to drop
+swap files.  If the system does not need more swap files for a certain period of
+time, the program reverts to the steady state.
 
 Overfed - significantly more virtual memory is available than is needed.  If
-this situation persists for a certain timeout period, a swapfile is deallocated
-and the program returns to the steady state.
+this situation persists for a certain timeout period, the program deallocates
+one of its swap files and returns to the steady state.  If there's still too
+much swap space, the program may come straight back to this state.
 
 Diet - a recent allocation attempt has run into resource limits, e.g. because
 the filesystem used for swap files was full.  No more swapspace can be allocated
