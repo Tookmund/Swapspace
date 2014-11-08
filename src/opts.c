@@ -248,7 +248,7 @@ static void short_usage(void)
 
 char *set_version(long long dummy)
 {
-  puts("swapspace " VERSION ", " DATE);
+  puts(PACKAGE_VERSION);
   puts(copyright);
   exit(EXIT_SUCCESS);
 }
