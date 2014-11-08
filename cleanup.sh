@@ -1,2 +1,3 @@
 #!/bin/sh
-rm -rf configure *.in *~ src/*.in src/*~
+make distclean
+rm -rf configure *.in *~ src/*.in src/*~ autom4te.cache
