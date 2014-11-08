@@ -36,11 +36,26 @@ AC_CHECK_FUNC([swapon],[
 AC_CHECK_FUNC([swapoff],[
 		AC_DEFINE([HAVE_SWAPOFF],[],[Define if system has swapoff()])
 		])
-# Define Version and Date
-# Will be removed by release!!
-#AC_DEFINE([VERSION],[AC_PACKAGE_VERSION],[Current Version Number])
-#AC_DEFINE_UNQUOTED([DATE],[`date`],[Date of Compile])
 
+# Check args for NO_CONFIG and NDEBUG
+AC_ARG_ENABLE([noconfig],[
+		AS_HELP_STRING([--enable-noconfig],
+		[Enable ultra-lightweight unconfigurable version]
+		)],
+		[
+		AC_DEFINE([NO_CONFIG],[],[Ultra-lightweight unconfigurable version])
+		],
+		[])
+
+AC_ARG_ENABLE([nodebug],[
+		AS_HELP_STRING([--enable-nodebug],
+		[Disable assertions and consistancy checking]
+		)],
+		[
+		AC_DEFINE([NDEBUG],[],[Disable assertions and consistancy checking])
+		],
+		[])
+		
 AC_CONFIG_FILES([Makefile
                  src/Makefile])
 AC_OUTPUT
