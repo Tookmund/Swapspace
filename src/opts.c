@@ -248,7 +248,7 @@ static void short_usage(void)
 
 char *set_version(long long dummy)
 {
-  puts(PACKAGE_VERSION);
+  puts(PACKAGE_STRING);
   puts(copyright);
   exit(EXIT_SUCCESS);
 }
