@@ -1,0 +1,6 @@
+configure 
+*.in 
+*~ 
+src/*.in 
+src/*~ 
+autom4te.cache
