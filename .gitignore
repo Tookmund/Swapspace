@@ -1,6 +1,11 @@
-configure 
+config* 
 *.in 
 *~ 
 src/*.in 
 src/*~ 
 autom4te.cache
+Makefile
+.deps
+stamp-h1
+swapspace
+swapspace-*
