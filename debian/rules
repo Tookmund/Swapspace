@@ -1,76 +1,38 @@
 #!/usr/bin/make -f
 # -*- makefile -*-
-# Based on file generated using debhelper
 
 # Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
+# export DH_VERBOSE=1
 
-CFLAGS="-Wall -g --std=c99 --pedantic -Wshadow"
+include /usr/share/quilt/quilt.make
 
-ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
-	CFLAGS += -O0
-else
-	CFLAGS += -O2
-endif
-
-configure: configure-stamp
-configure-stamp:
-	dh_testdir
-	# Add here commands to configure the package.
-	touch configure-stamp
-
+%:
+	dh $@
 
 build: build-stamp
-
-build-stamp: configure-stamp 
-	dh_testdir
-	# Add here commands to compile the package.
-	$(MAKE)
-	#docbook-to-man debian/swapspace.sgml > swapspace.1
+build-stamp: $(QUILT_STAMPFN)
+	dh build --before dh_auto_build
+	$(MAKE) DEB_FLAGS="$(CFLAGS)"
+	dh build --after dh_auto_build
 	touch build-stamp
 
-clean:
+clean: unpatch
 	dh_testdir
 	dh_testroot
-	rm -f build-stamp configure-stamp
+	rm -f build-stamp
 	# Add here commands to clean up after the build process.
-	-$(MAKE) clean
+	rm -f src/svn-commit.tmp src/swapspace src/hog
+	[ ! -f Makefile ] || $(MAKE) clean
 	dh_clean 
 
 install: build
-	dh_testdir
-	dh_testroot
-	dh_clean -k 
-	dh_installdirs
-	# Add here commands to install the package into debian/swapspace.
+	dh install --before dh_auto_install
 	$(MAKE) install DESTDIR=$(CURDIR)/debian/swapspace
-
-
-# Build architecture-independent files here.
-binary-indep: build install
-# We have nothing to do by default.
+	dh install --after dh_auto_install
 
 # Build architecture-dependent files here.
 binary-arch: build install
-	dh_testdir
-	dh_testroot
-	dh_installdocs
-	dh_installexamples
-	dh_install
-#	dh_installdebconf	
-	dh_installinit
-	dh_installman doc/swapspace.8
-	dh_installchangelogs
-	dh_link
-	dh_strip
-	dh_compress
-	dh_fixperms
-	dh_makeshlibs
-	dh_installdeb
-	dh_shlibdeps
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
+	dh binary-arch
 
-binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install configure
+binary: binary-arch
+.PHONY: build clean binary-arch binary install
