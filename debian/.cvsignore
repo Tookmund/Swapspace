@@ -1,7 +1,0 @@
-swapspace
-substvars
-tmp
-files
-postinst.debhelper
-postrm.debhelper
-prerm.debhelper
