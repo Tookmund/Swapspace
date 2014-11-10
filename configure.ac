@@ -10,7 +10,7 @@ AC_CONFIG_HEADERS([src/config.h])
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_INSTALL
-
+AC_PROG_MKDIR_P
 # Checks for libraries.
 
 # Checks for header files.

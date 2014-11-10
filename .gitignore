@@ -9,3 +9,4 @@ Makefile
 stamp-h1
 swapspace
 swapspace-*
+*.m4
