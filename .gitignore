@@ -10,3 +10,4 @@ stamp-h1
 swapspace
 swapspace-*
 *.m4
+*.o
