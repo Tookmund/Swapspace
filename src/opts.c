@@ -249,7 +249,8 @@ static void short_usage(void)
 
 char *set_version(long long dummy)
 {
-  puts(PACKAGE_STRING);
+  if (PACKAGE_VERSION) puts(PACKAGE_STRING);
+  else puts("swapspace unknown");
   puts(copyright);
   exit(EXIT_SUCCESS);
 }

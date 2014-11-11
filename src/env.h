@@ -23,10 +23,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #ifndef SWAPSPACE_ENV_H
 #define SWAPSPACE_ENV_H
 
-#ifndef HAVE_CONFIG_H_
-#define PACKAGE_STRING "swapspace unknown"
-#endif
-
 #ifdef _LARGE_FILES
 # define _LARGEFILE64_SOURCE
 # define SEEK(fd,pos,whence) lseek64(fd,pos,whence)
