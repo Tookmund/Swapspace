@@ -6,3 +6,4 @@ Swap Space
 +Autotools
 +LSB Init Script
 +Split up README
++Applied patch from Debian bug #691128
