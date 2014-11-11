@@ -210,7 +210,8 @@ struct memstate
 	    Writeback,
 	    SwapCached,
 	    SwapTotal,
-	    SwapFree;
+	    SwapFree,
+	    Shmem;
 };
 
 
@@ -241,6 +242,7 @@ void imbibe_meminfo_entry(const struct meminfo_item *inf, struct memstate *st)
       else if (strcmp(inf->entry+4, "Free")==0)   st->SwapFree = inf->value;
       else if (strcmp(inf->entry+4, "Cached")==0) st->SwapCached = inf->value;
     }
+    if (strcmp(inf->entry,"Shmem")==0)            st->Shmem = inf->value;
     break;
   case 'W':
     if (strcmp(inf->entry,"Writeback")==0)        st->Writeback = inf->value;
@@ -311,7 +313,7 @@ static inline memsize_t buffers_free(const struct memstate *st)
 /// How much cache space can we expect the system to free up?
 static inline memsize_t cache_free(const struct memstate *st)
 {
-  const memsize_t cache = st->Cached - (st->Dirty + st->Writeback);
+  const memsize_t cache = st->Cached - (st->Dirty + st->Writeback + st->Shmem);
   return (cache > 0) ? (cache/100)*cache_elasticity : 0;
 }
 
