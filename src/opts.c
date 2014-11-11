@@ -44,7 +44,8 @@ static const char copyright[] = "\n"
       "Written by Jeroen T. Vermeulen\n"
       "This program is free software, and is available for use under the GNU\n"
       "General Public License (GPL).\n"
-      "See http://pqxx.org/development/swapspace\n";
+      "See http://pqxx.org/development/swapspace\n"
+      "This is a fork of the original project by Jacob Adams hosted at https://github.com/Tookmund/swapspace\n";
 
 
 #ifndef NO_CONFIG
