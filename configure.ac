@@ -11,7 +11,9 @@ AC_CONFIG_HEADERS([src/config.h])
 AC_PROG_CC
 AC_PROG_INSTALL
 AC_PROG_MKDIR_P
-# Checks for libraries.
+
+# Enable large files
+AC_SYS_LARGEFILE
 
 # Checks for header files.
 AC_CHECK_HEADERS([fcntl.h limits.h locale.h stdlib.h string.h sys/param.h sys/statvfs.h syslog.h unistd.h])
