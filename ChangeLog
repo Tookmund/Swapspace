@@ -1,3 +1,12 @@
+swapspace (1.11) stable; urgency=medium
+  * New upstream
+  * Autotools build system
+  * Account for tmpfs (Debian #691128)
+  * SystemD Service
+  * Split up README
+  
+ -- Jacob Adams <tookmund@gmail.com> Mon, 17 Nov 2014 09:35:00 +0500
+ 
 swapspace (1.10) stable; urgency=high
 
   * Eliminated integer overflows with large swap files

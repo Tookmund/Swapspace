@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #ifndef SWAPSPACE_ENV_H
 #define SWAPSPACE_ENV_H
 
-#ifdef SUPPORT_LARGE_FILES
+#ifdef _LARGE_FILES
 # define _LARGEFILE64_SOURCE
 # define SEEK(fd,pos,whence) lseek64(fd,pos,whence)
 #else

@@ -44,7 +44,8 @@ static const char copyright[] = "\n"
       "Written by Jeroen T. Vermeulen\n"
       "This program is free software, and is available for use under the GNU\n"
       "General Public License (GPL).\n"
-      "See http://pqxx.org/development/swapspace\n";
+      "See http://pqxx.org/development/swapspace\n"
+      "This is a fork of the original project by Jacob Adams hosted at https://github.com/Tookmund/swapspace\n";
 
 
 #ifndef NO_CONFIG
@@ -248,7 +249,8 @@ static void short_usage(void)
 
 char *set_version(long long dummy)
 {
-  puts("swapspace " VERSION ", " DATE);
+  if (PACKAGE_VERSION) puts(PACKAGE_STRING);
+  else puts("swapspace unknown");
   puts(copyright);
   exit(EXIT_SUCCESS);
 }

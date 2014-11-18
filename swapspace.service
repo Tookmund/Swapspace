@@ -1,0 +1,15 @@
+[Unit]
+Description=Swapspace, a dynamic swap space manager
+After=local-fs.target
+Requires=local-fs.target
+After=swap.target
+Requires=swap.target
+
+[Service]
+Type=simple
+ExecStart=/sbin/swapspace
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
