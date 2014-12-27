@@ -25,11 +25,11 @@
 . /lib/lsb/init-functions
 
 set -e
-
+PREFIX="/usr/local"
 PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
 DESC="dynamic swap manager"
 NAME=swapspace
-DAEMON="/usr/sbin/$NAME"
+DAEMON="$PREFIX/sbin/$NAME"
 PIDFILE="/var/run/$NAME.pid"
 
 PARANOID="no"

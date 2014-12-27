@@ -7,7 +7,7 @@ Requires=swap.target
 
 [Service]
 Type=simple
-ExecStart=/usr/sbin/swapspace
+ExecStart=/usr/local/sbin/swapspace
 Restart=always
 RestartSec=30
 
