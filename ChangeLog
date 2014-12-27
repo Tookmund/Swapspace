@@ -3,6 +3,7 @@ swapspace (1.12) stable; urgency=medium
   * Account for normal install (i.e. /usr/local) in code and initscripts
   * Clean up Makefile flags
   * Add full text of GPL-2
+  * Compile hog
  
  -- Jacob Adams <tookmund@gmail.com> Sat, 27 December 2014 11:32:00 +0500 
 
