@@ -1,3 +1,4 @@
+VERSION=1.12
 autoreconf
 ./configure
-tar cavf swapspace-1.11.tar.gz --exclude-vcs .
+tar cavf swapspace-$VERSION.tar.gz --exclude-vcs .
