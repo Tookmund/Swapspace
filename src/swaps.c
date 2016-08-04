@@ -476,6 +476,8 @@ static memsize_t filesize(const char name[])
   if (unlikely(pos == -1))
     log_perr_str(LOG_WARNING, "Can't determine size of", name, errno);
 
+  close(fd);
+
   return pos;
 }
 
@@ -703,7 +705,10 @@ static bool retire_swapfile(int file)
   unlink(namebuf);
 
 #ifndef NO_CONFIG
-  if (fd != -1) write_data(fd, swapfiles[file].size, true);
+  if (fd != -1) {
+    write_data(fd, swapfiles[file].size, true);
+    close(fd);
+  }
 #endif
 
   swapfiles[file].size = 0;
