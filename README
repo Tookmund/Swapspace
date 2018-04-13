@@ -9,10 +9,10 @@ swapfile!
 
 Where to start
 ==============
-If you cloned this repo be sure to run autoreconf to make configure script. 
-If you downloaded a tarball from github the configure script should be there 
-already. 
-If you install to somewhere other than /usr/local/ be sure to edit the 
+If you cloned this repo be sure to run autoreconf to make configure script.
+If you downloaded a tarball from github the configure script should be there
+already.
+If you install to somewhere other than /usr/local/ be sure to edit the
 ETCPREFIX and VARPREFIX variables in src/env.h as well as the initscript
 
 Be sure to install the relevant initscript as well to have this run at startup.
@@ -62,6 +62,14 @@ about it.  It would help if the kernel were able to extend a swap file that's
 already in use.  But that is of course the price you pay for virtual memory:
 slower but cheaper.  If your system is too slow because there's not enough
 memory, the ultimate answer is still: try to use less or buy more!
+
+What's Swapspace up to?
+=======================
+
+Probably nothing! Most modern machines have enough memory that this tool is
+entirely unecessary. Those that don't have enough disk space to just allocate a
+static swapfile or partition. If you use swapspace for a while and see no
+output from it, you probably don't need it.
 
 See also
 ========
