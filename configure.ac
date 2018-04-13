@@ -39,7 +39,11 @@ AC_CHECK_FUNC([swapoff],[
 		AC_DEFINE([HAVE_SWAPOFF],[],[Define if system has swapoff()])
 		])
 
-# Check args for NO_CONFIG and NDEBUG
+AC_CHECK_FUNC([posix_fallocate],[
+		AC_DEFINE([HAVE_PFALLOCATE],[],[Define if system has posix_fallocate()])
+		])
+
+# Check args for NO_CONFIG, NDEBUG, and NO_PFALLOCATE
 AC_ARG_ENABLE([noconfig],[
 		AS_HELP_STRING([--enable-noconfig],
 		[Enable ultra-lightweight unconfigurable version]
@@ -57,7 +61,16 @@ AC_ARG_ENABLE([nodebug],[
 		AC_DEFINE([NDEBUG],[],[Disable assertions and consistancy checking])
 		],
 		[])
-		
+
+AC_ARG_ENABLE([no-posix-fallocate],[
+		AS_HELP_STRING([--enable-no-posix-fallocate],
+		[Disable allocation of swapfiles with posix_fallocate. Makes swapspace slower, but is necessary for some filesystems like XFS or F2FS]
+		)],
+		[
+		AC_DEFINE([NO_PFALLOCATE],[],[Disable allocation of swapfiles with posix_fallocate])
+		],
+		[])
+
 AC_CONFIG_FILES([Makefile
                  src/Makefile])
 AC_OUTPUT
