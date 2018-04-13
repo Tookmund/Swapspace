@@ -4,6 +4,9 @@ Status: Complete
 swapspace - dynamic swap manager for Linux
 ==========================================
 
+N.B. If you want suspend and resume to work you will still need a static
+swapfile!
+
 Where to start
 ==============
 If you cloned this repo be sure to run autoreconf to make configure script. 
