@@ -57,6 +57,8 @@ bool swapfs_large_enough(void);
 extern bool quiet;
 /// Print debug output when changing state and such?
 extern bool verbose;
+/// Use file zeroing or posix_fallocate?
+extern bool zero;
 
 char *set_quiet(long long dummy);
 char *set_verbose(long long dummy);

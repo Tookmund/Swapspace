@@ -62,15 +62,6 @@ AC_ARG_ENABLE([nodebug],[
 		],
 		[])
 
-AC_ARG_ENABLE([no-posix-fallocate],[
-		AS_HELP_STRING([--enable-no-posix-fallocate],
-		[Disable allocation of swapfiles with posix_fallocate. Makes swapspace slower, but is necessary for some filesystems like XFS or F2FS]
-		)],
-		[
-		AC_DEFINE([NO_PFALLOCATE],[],[Disable allocation of swapfiles with posix_fallocate])
-		],
-		[])
-
 AC_CONFIG_FILES([Makefile
                  src/Makefile])
 AC_OUTPUT

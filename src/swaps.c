@@ -333,11 +333,9 @@ static memsize_t write_data(int fd, memsize_t bytes, bool persevere)
   // Round upwards to multiple of page size
   bytes = ext_to_page(bytes);
 #ifdef HAVE_PFALLOCATE
-#ifndef NO_PFALLOCATE
  // Have posix_fallocate().  Much faster way of getting the file populated.
- if (posix_fallocate(fd, 0, bytes) == 0) return bytes;
+ if (!zero && posix_fallocate(fd, 0, bytes) == 0) return bytes;
  // We have no error backchannel here, so on failure, try the old way.
-#endif
 #endif
   /* Zero buffer before using it to write data to swapfile.  This doesn't do
    * much for security (if an attacker can get to your swapfiles you don't have
