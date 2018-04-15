@@ -63,14 +63,6 @@ already in use.  But that is of course the price you pay for virtual memory:
 slower but cheaper.  If your system is too slow because there's not enough
 memory, the ultimate answer is still: try to use less or buy more!
 
-What's Swapspace up to?
-=======================
-
-Probably nothing! Most modern machines have enough memory that this tool is
-entirely unecessary. Those that don't have enough disk space to just allocate a
-static swapfile or partition. If you use swapspace for a while and see no
-output from it, you probably don't need it.
-
 See also
 ========
 Home page:
