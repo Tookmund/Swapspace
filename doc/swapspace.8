@@ -133,6 +133,13 @@ Log debug information to system log and/or standard output, as appropriate.
 .TP
 \fB\-V\fR, \fB\-\-version\fR
 Print program version information and exit.
+.TP
+
+\fB\-z\fR, \fB\-\-zero\fR
+Force swapspace to manually allocate swapfiles instead of using posix_fallocate.
+Some filesystems (such as XFS, F2FS or BTRFS) don't allow swapfiles to be
+created with posix_fallocate. It's still enabled by default, however, as it is
+much faster than the manual method for filesystems that support it.
 .PP
 Numbers may be suffixed with \fIk\fR, \fIm\fR, \fIg\fR or \fIt\fR to indicate
 kilobytes, megabytes, gigabytes or terabytes respectively: \fI1k\fR means 1024
