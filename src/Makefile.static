@@ -16,7 +16,7 @@ RM=rm -f
 
 # Uncomment this to disable assertions and internal consistency checking that
 # you probably don't need after release.
-# CPPFLAGS += -DNDEBUG
+# CPPFLAGS += -DNO_DEBUG
 
 all : swapspace hog
 

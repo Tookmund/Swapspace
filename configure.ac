@@ -43,7 +43,7 @@ AC_CHECK_FUNC([posix_fallocate],[
 		AC_DEFINE([HAVE_PFALLOCATE],[],[Define if system has posix_fallocate()])
 		])
 
-# Check args for NO_CONFIG, NDEBUG, and NO_PFALLOCATE
+# Check args for NO_CONFIG, NO_DEBUG
 AC_ARG_ENABLE([noconfig],[
 		AS_HELP_STRING([--enable-noconfig],
 		[Enable ultra-lightweight unconfigurable version]
@@ -58,7 +58,7 @@ AC_ARG_ENABLE([nodebug],[
 		[Disable assertions and consistancy checking]
 		)],
 		[
-		AC_DEFINE([NDEBUG],[],[Disable assertions and consistancy checking])
+		AC_DEFINE([NO_DEBUG],[],[Disable assertions and consistancy checking])
 		],
 		[])
 

@@ -141,7 +141,7 @@ static int optcmp(const void *o1, const void *o2)
 }
 
 
-#ifndef NDEBUG
+#ifndef NO_DEBUG
 static bool options_okay(void)
 {
   static const int num_opts = sizeof(options)/sizeof(*options);
@@ -185,7 +185,7 @@ static bool options_okay(void)
   }
   return true;
 }
-#endif	// NDEBUG
+#endif	// NO_DEBUG
 
 static const char *argproto(int opt, bool shortopt)
 {
