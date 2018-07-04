@@ -1,3 +1,18 @@
-7 November 2014: 
-This project has been forked by Jacob Adams as it is no longer maintained 
-upstream
+v1.13
+=====
++ Merge new upstream changes
+	+ Use posix_fallocat() to initialize swap files without writing data to them.
+
+
+v1.12
+======
++ Use PREFIX variables to support multiple install locations
++ Compile test program, hog, for testing how much memory you can allocate
++ Clean up compile flags
+
+v1.11
+======
++ New upstream (https://github.com/Tookmund/swapspace)
++ New maintainer (tookmund@gmail.com)
++ Autotools build system (configure && make && make install)
++ Bug fixes
