@@ -1,3 +1,9 @@
+v1.14
+=====
++ Convert README to markdown
++ Add ability to disable posix fallocate with --zero option
++ Use NO_DEBUG instead of NDEBUG for consistency
+
 v1.13
 =====
 + Merge new upstream changes
