@@ -1,5 +1,6 @@
 [Unit]
 Description=Swapspace, a dynamic swap space manager
+Documentation=man:swapspace(8)
 After=local-fs.target
 Requires=local-fs.target
 After=swap.target
