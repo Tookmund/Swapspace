@@ -1,3 +1,5 @@
+![logo](doc/logo.svg)
+
 Swapspace - dynamic swap manager for Linux
 ==========================================
 
