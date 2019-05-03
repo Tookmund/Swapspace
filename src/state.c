@@ -84,6 +84,7 @@ static const char *Statenames[] =
 
 static enum State the_state = st_hungry;
 static bool need_diet = false;
+static memsize_t oldreqbytes = 0;
 
 void request_diet(void) { need_diet = true; }
 
@@ -107,6 +108,10 @@ void handle_requirements(void)
   }
 
   const memsize_t reqbytes = memory_target();
+#ifndef NO_CONFIG
+  if (verbose && reqbytes != oldreqbytes)
+	  logm(LOG_DEBUG,"Required Bytes: %d", reqbytes);
+#endif
   timer_tick();
 
   if (unlikely(reqbytes > 0) && likely(the_state != st_diet))
@@ -126,6 +131,9 @@ void handle_requirements(void)
      * The only other action that accompanies timeout is when timing out of the
      * "overfed" state, which is where we normally deallocate.
      */
+#ifndef NO_CONFIG
+    if (verbose) logm(LOG_DEBUG,"Timeout");
+#endif
     if (unlikely(the_state == st_overfed)) free_swapfile(-reqbytes);
     state_to(st_steady);
   }
@@ -161,6 +169,7 @@ void handle_requirements(void)
     if (unlikely(reqbytes >= 0)) state_to(st_steady);
     break;
   }
+  oldreqbytes = reqbytes;
 }
 
 
