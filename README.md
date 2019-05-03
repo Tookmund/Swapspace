@@ -8,14 +8,19 @@ swapfile!**
 
 Where to start
 --------------
-If you cloned this repo be sure to run autoreconf to make configure script.
+If you cloned this repo be sure to run `autoreconf` to make the configure script.
 If you downloaded a tarball from github the configure script should be there
 already.
 If you install to somewhere other than ```/usr/local/``` be sure to edit the
 ```ETCPREFIX``` and ```VARPREFIX``` variables in ```src/env.h``` as well as the
 initscript.
 
+For detailed installation instructions, see `INSTALL`
+
 Be sure to install the relevant initscript as well to have this run at startup.
+Swapspace ships a systemd unit file as `swapspace.service` that should be
+installed in `/etc/systemd/system/` or a SysVinit script as `swapspace.lsbinit`
+that should be installed in `/etc/init.d/` as just `swapspace`.
 
 What it does for you
 --------------------
