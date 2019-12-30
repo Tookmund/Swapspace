@@ -38,7 +38,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #include <sys/swap.h>
 #include <sys/types.h>
 #include <sys/ioctl.h>
+#include <sys/vfs.h>
 #include <linux/fs.h>
+#include <linux/magic.h>
 
 #include "log.h"
 #include "opts.h"
@@ -421,6 +423,33 @@ int set_no_cow(int fd)
   return 0;
 }
 
+/// Store filesystem type so we don't check everytime we allocate a swapfile
+__fsword_t fstype = 0;
+
+/// Handle filesystem-specific operations needed for swapfiles
+/* Some filesystems, like BTRFS, require special operations to be performed on
+ * files before they can be used as swapfiles
+ * Clobbers localbuf if special operations are performed
+ */
+void specialfs(const char path[])
+{
+  int err;
+  // All swapfiles exist on the same filesystem, so we should only need to
+  // call this once
+  if (fstype == 0)
+  {
+    struct statfs buf;
+    err = statfs(path, &buf);
+	if (err != 0) fstype = buf.f_type;
+  }
+  if (err < 0) log_perr_str(LOG_WARNING, "Could not detect filesystem", path, errno);
+  else if (fstype == BTRFS_SUPER_MAGIC)
+  {
+    err = runcommandformat("%s property set '%s' compression none", "btrfs", path);
+    if (err != 0) logm(LOG_WARNING, "Could not disable BTRFS compression! Return Code: %d", err);
+  }
+}
+
 /// Create file to be used as swap.  Clobbers localbuf.
 /**
  * @param filename File to be created
@@ -450,6 +479,8 @@ static memsize_t make_swapfile(const char file[], memsize_t size)
 
   int err = set_no_cow(fd);
   if (unlikely(err != 0)) log_perr_str(LOG_WARNING, "Could not disable COW", file, errno);
+
+  specialfs(file);
 
   if (unlikely(!fill_swapfile(file, fd, size)))
   {
