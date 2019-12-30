@@ -45,10 +45,10 @@ int swapoff(const char path[])
 #endif
 
 
-int runcommand(const char cmd[], const char arg[])
+int runcommandformat(const char format[], const char cmd[], const char arg[])
 {
   const size_t bufsz = sizeof(localbuf);
-  if (unlikely(snprintf(localbuf, bufsz, "%s '%s'", cmd, arg) >= bufsz))
+  if (unlikely(snprintf(localbuf, bufsz, format, cmd, arg) >= bufsz))
   {
     errno = E2BIG;
     return -1;
@@ -56,4 +56,7 @@ int runcommand(const char cmd[], const char arg[])
   return system(localbuf);
 }
 
-
+int runcommand(const char cmd[], const char arg[])
+{
+  return runcommandformat("%s '%s'", cmd, arg);
+}

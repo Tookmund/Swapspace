@@ -44,6 +44,8 @@ int swapoff(const char path[]);
  */
 int runcommand(const char cmd[], const char arg[]);
 
+/// Same as above, but with a controllable format string for more complex commands
+int runcommandformat(const char format[], const char cmd[], const char arg[]);
 
 #define INTERNAL_STRINGIFY(VALUE) #VALUE
 #define STRINGIFY(VALUE) INTERNAL_STRINGIFY(VALUE)
