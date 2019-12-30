@@ -37,6 +37,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #include <sys/statvfs.h>
 #include <sys/swap.h>
 #include <sys/types.h>
+#include <sys/ioctl.h>
+#include <linux/fs.h>
 
 #include "log.h"
 #include "opts.h"
@@ -402,6 +404,22 @@ static memsize_t fill_swapfile(const char file[], int fd, memsize_t size)
   return bytes;
 }
 
+/// Ensure COW updates don't apply to swapfiles.
+/* Only needed to BTRFS and other COW filesystems.
+ * But can't hurt to apply everywhere.
+ */
+int set_no_cow(int fd)
+{
+  int attr;
+  int err;
+
+  err = ioctl(fd, FS_IOC_GETFLAGS, &attr);
+  if (err != 0) return err;
+  attr |= FS_NOCOW_FL;
+  err = ioctl(fd, FS_IOC_SETFLAGS, &attr);
+  if (err != 0) return err;
+  return 0;
+}
 
 /// Create file to be used as swap.  Clobbers localbuf.
 /**
@@ -429,6 +447,9 @@ static memsize_t make_swapfile(const char file[], memsize_t size)
     log_perr_str(LOG_ERR, "Could not create swapfile", file, errno);
     return 0;
   }
+
+  int err = set_no_cow(fd);
+  if (unlikely(err != 0)) log_perr_str(LOG_WARNING, "Could not disable COW", file, errno);
 
   if (unlikely(!fill_swapfile(file, fd, size)))
   {
