@@ -1,3 +1,8 @@
+v1.15
+=====
++ Support BTRFS
++ Enforce correct permissions on swapfile directory
+
 v1.14
 =====
 + Convert README to markdown
