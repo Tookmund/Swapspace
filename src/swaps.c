@@ -442,7 +442,7 @@ void specialfs(const char path[])
   {
     struct statfs buf;
     err = statfs(path, &buf);
-	if (err != 0) fstype = buf.f_type;
+    if (err == 0) fstype = buf.f_type;
   }
   if (err < 0) log_perr_str(LOG_WARNING, "Could not detect filesystem", path, errno);
   else if (fstype == BTRFS_SUPER_MAGIC)
