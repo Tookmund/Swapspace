@@ -423,8 +423,10 @@ int set_no_cow(int fd)
   return 0;
 }
 
-/// Store filesystem type so we don't check everytime we allocate a swapfile
-__fsword_t fstype = 0;
+/* Store filesystem type so we don't check everytime we allocate a swapfile
+ * __fsword_t is a glibc-internal type, but the docs claim unsigned int is fine
+ */
+unsigned int fstype = 0;
 
 /// Handle filesystem-specific operations needed for swapfiles
 /* Some filesystems, like BTRFS, require special operations to be performed on
