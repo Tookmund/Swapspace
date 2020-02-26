@@ -1,3 +1,7 @@
+v1.15.1
+=======
++ Fix catastrophic errors in previous release
+
 v1.15
 =====
 + Support BTRFS
