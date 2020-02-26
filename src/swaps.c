@@ -181,6 +181,22 @@ bool to_swapdir(void)
     return false;
   }
 #endif
+  struct stat swapdirstat;
+  mode_t mode = S_IRUSR | S_IWUSR | S_IXUSR;
+  if (stat(swappath, &swapdirstat) < 0)
+  {
+    log_perr(LOG_ERR, "Unable to stat swap path", errno);
+    return false;
+  }
+  if (swapdirstat.st_mode != mode)
+  {
+    logm(LOG_WARNING, "Swap file directory permissions wrong, fixing");
+    if (chmod(swappath, mode) < 0)
+    {
+      log_perr(LOG_ERR, "Unable to change swap file directory permissions", errno);
+      return false;
+    }
+  }
 
   return true;
 }
