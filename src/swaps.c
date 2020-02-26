@@ -3,6 +3,7 @@ This file is part of Swapspace.
 
 Copyright (C) 2005,2006, Software Industry Industry Promotion Agency (SIPA)
 Copyright (C) 2010, Jeroen T. Vermeulen
+Copyright (C) 2019, Jacob Adams
 Written by Jeroen T. Vermeulen.
 
 Swapspace is free software; you can redistribute it and/or modify
