@@ -1,3 +1,7 @@
+v1.16
+=====
++ Enforce correct permissions on swapfile directory
+
 v1.15.1
 =======
 + Fix catastrophic errors in previous release
@@ -5,7 +9,6 @@ v1.15.1
 v1.15
 =====
 + Support BTRFS
-+ Enforce correct permissions on swapfile directory
 
 v1.14
 =====
