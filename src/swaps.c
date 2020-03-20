@@ -182,7 +182,7 @@ bool to_swapdir(void)
   }
 #endif
   struct stat swapdirstat;
-  mode_t mode = S_IRUSR | S_IWUSR | S_IXUSR;
+  mode_t mode = S_IFDIR | S_IRUSR | S_IWUSR | S_IXUSR;
   if (stat(swappath, &swapdirstat) < 0)
   {
     log_perr(LOG_ERR, "Unable to stat swap path", errno);
