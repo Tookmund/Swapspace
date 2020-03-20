@@ -1,3 +1,9 @@
+v1.16.1
+=======
++ Fix permissions checking error
++ Log swap directory permissions when verbose
++ Log commands when verbose
+
 v1.16
 =====
 + Enforce correct permissions on swapfile directory
