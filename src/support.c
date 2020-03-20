@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "log.h"
 #include "main.h"
 #include "support.h"
 
@@ -52,6 +53,10 @@ int runcommandformat(const char format[], const char cmd[], const char arg[])
   {
     errno = E2BIG;
     return -1;
+  }
+  if (verbose)
+  {
+    logm(LOG_DEBUG, "Running: (%s)", localbuf);
   }
   return system(localbuf);
 }
