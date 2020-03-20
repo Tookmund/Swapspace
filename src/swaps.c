@@ -191,6 +191,10 @@ bool to_swapdir(void)
   if (swapdirstat.st_mode != mode)
   {
     logm(LOG_WARNING, "Swap file directory permissions wrong, fixing");
+    if (verbose)
+    {
+      logm(LOG_DEBUG, "Actual: %o\nExpected: %o", swapdirstat.st_mode, mode);
+    }
     if (chmod(swappath, mode) < 0)
     {
       log_perr(LOG_ERR, "Unable to change swap file directory permissions", errno);
