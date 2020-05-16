@@ -1,6 +1,3 @@
-==========================================
-swapspace - dynamic swap manager for Linux
-==========================================
 
 Technical details
 =================
