@@ -67,13 +67,6 @@ static char *set_inspect(long long dummy)
   return NULL;
 }
 
-bool zero = false;
-static char *set_zero(long long dummy)
-{
-  zero = true;
-  return NULL;
-}
-
 enum argtype { at_none, at_num, at_str };
 struct option
 {
@@ -128,9 +121,7 @@ static const struct option options[] =
   { "verbose",		'v', at_none, 0, 0, set_verbose,
   "Print lots of debug information" },
   { "version",		'V', at_none, 0, 0, set_version,
-  "Print version number and exit" },
-  { "zero",			'z', at_none, 0, 0, set_zero,
-  "Force swapfile allocation by manually filling with zeros" }
+  "Print version number and exit" }
 };
 
 
