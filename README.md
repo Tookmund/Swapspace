@@ -11,7 +11,7 @@ Where to start
 If you cloned this repo be sure to run `autoreconf` to make the configure script.
 If you downloaded a tarball from github the configure script should be there
 already.
-For detailed installation instructions, see `INSTALL`, but it usually just
+For detailed installation instructions see `INSTALL`, but it usually just
 boils down to `./configure && make && make install`
 
 Be sure to install the relevant initscript as well to have this run at startup.
@@ -21,6 +21,25 @@ that should be installed in `/etc/init.d/` as just `swapspace`.
 
 If you installed to a non-standard location (not `/usr/local`), you'll
 have to update these init scripts to use the correct location.
+
+The installation procedure creates a directory `/var/lib/swapspace`
+(or rather `/usr/local/var/lib/swapspace`, or whatever you set `localstatedir`
+to in `configure`), which must be
+accessible to the system's superuser (root) only; granting any kind of access
+for this directory to an untrusted user constitutes a serious security hole.
+As of version 1.16, swapspace will enforce correct permissions on this
+directory.
+
+According to the Filesystem Hierarchy Standard, other appropriate places for
+this kind of file might be `/var/tmp` or `/var/run`.  The former was not deemed
+appropriate because it is accessible to all users, and the latter because it's
+meant for very small files.
+
+Files in `/var/lib` survive reboots whereas those in `/var/tmp` and `/var/run`
+need not.  Obviously any data in swap files can be safely erased on reboot--it
+may arguably be safer.  But keeping your swap files across reboots means you
+spend less time waiting for swap files that you also needed the last time you
+used your computer.
 
 What it does for you
 --------------------
@@ -82,6 +101,7 @@ You'll find a manual under "doc" in the source tree.  Read it with:
 
     man -l doc/swapspace.8
 
-For technical details of the installation and the algorithm, see `doc/technicaldetails.md`
+For the technical details of the algorithm used to allocate swapfiles,
+see `doc/technicaldetails.md`
 
 For a comparison with other swapspace managers, see `doc/comparison.md`

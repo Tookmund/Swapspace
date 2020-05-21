@@ -2,25 +2,6 @@
 Technical details
 =================
 
-Installation
-------------
-
-The installation procedure creates a directory /var/lib/swapspace, which must be
-accessible to the system's superuser (root) only; granting any kind of access
-for this directory to an untrusted user constitutes a serious security hole.
-
-According to the Filesystem Hierarchy Standard, other appropriate places for
-this kind of file might be /var/tmp or /var/run.  The former was not deemed
-appropriate because it is accessible to all users, and the latter because it's
-meant for very small files.
-
-Files in /var/lib survive reboots whereas those in /var/tmp and /var/run need
-not.  Obviously any data in swap files can be safely erased on reboot--it may
-arguably be safer.  But keeping your swap files across reboots means you spend
-less time waiting for swap files that you also needed the last time you used
-your computer.
-
-
 Algorithm
 ---------
 
