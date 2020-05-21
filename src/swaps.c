@@ -867,6 +867,7 @@ bool alloc_swapfile(memsize_t size)
     swapfiles[newswap].size = 0;
     if (canpfalloc && errno == EINVAL)
     {
+      logm(LOG_NOTICE, "Quick swapfile creation disabled.");
       // If we get EINVAL, then we can't actually use posix_fallocate
       canpfalloc = false;
       // Try again
