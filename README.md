@@ -82,4 +82,6 @@ You'll find a manual under "doc" in the source tree.  Read it with:
 
     man -l doc/swapspace.8
 
+For technical details of the installation and the algorithm, see `doc/technicaldetails.md`
 
+For a comparison with other swapspace managers, see `doc/comparison.md`
