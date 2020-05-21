@@ -485,7 +485,7 @@ void specialfs(const char path[])
     if (err == 0) fstype = buf.f_type;
     else log_perr_str(LOG_WARNING, "Could not detect filesystem", path, errno);
   }
-  else if (fstype == BTRFS_SUPER_MAGIC)
+  if (fstype == BTRFS_SUPER_MAGIC)
   {
     err = runcommandformat("%s property set '%s' compression none", "btrfs", path);
     if (err != 0) logm(LOG_WARNING, "Could not disable BTRFS compression! Return Code: %d", err);
