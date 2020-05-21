@@ -320,6 +320,8 @@ memsize_t swapfs_size(void)
   return fs_size(fsinfo.f_blocks, fsinfo.f_bsize);
 }
 
+/// If we can allocate swapfiles using posix_allocate on this filesystem
+bool canpfalloc = true;
 
 /// Turn an existing file into an active swap.  Clobbers localbuf.
 /**
@@ -333,8 +335,6 @@ static bool enable_swapfile(const char file[])
     log_perr_str(LOG_ERR, "Could not enable swapfile", file, errno);
   return ok;
 }
-
-
 
 /// Write arbitrary data to swapfile.  Clobbers localbuf.
 /** Fill a swapfile with the specified number of bytes of data.  We don't care
@@ -359,7 +359,7 @@ static memsize_t write_data(int fd, memsize_t bytes, bool persevere)
   bytes = ext_to_page(bytes);
 #ifdef HAVE_PFALLOCATE
  // Have posix_fallocate().  Much faster way of getting the file populated.
- if (!zero && posix_fallocate(fd, 0, bytes) == 0) return bytes;
+ if (canpfalloc && posix_fallocate(fd, 0, bytes) == 0) return bytes;
  // We have no error backchannel here, so on failure, try the old way.
 #endif
   /* Zero buffer before using it to write data to swapfile.  This doesn't do
@@ -863,9 +863,19 @@ bool alloc_swapfile(memsize_t size)
 
   if (unlikely(!enable_swapfile(file)))
   {
-    unlink(file);
-    request_diet();
-    return false;
+    if (canpfalloc && errno == EINVAL)
+    {
+      // If we get EINVAL, then we can't actually use posix_fallocate
+      canpfalloc = false;
+      // Try again
+      return alloc_swapfile(size-2*getpagesize());
+    }
+    else
+    {
+      unlink(file);
+      request_diet();
+      return false;
+    }
   }
 
   sequence_number = inc_swapno(sequence_number);
