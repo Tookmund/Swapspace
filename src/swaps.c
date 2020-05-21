@@ -863,6 +863,8 @@ bool alloc_swapfile(memsize_t size)
 
   if (unlikely(!enable_swapfile(file)))
   {
+    unlink(file);
+    swapfiles[newswap].size = 0;
     if (canpfalloc && errno == EINVAL)
     {
       // If we get EINVAL, then we can't actually use posix_fallocate
@@ -872,7 +874,6 @@ bool alloc_swapfile(memsize_t size)
     }
     else
     {
-      unlink(file);
       request_diet();
       return false;
     }
