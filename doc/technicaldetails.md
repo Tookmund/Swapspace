@@ -32,6 +32,8 @@ between the desire to free up unused swap space on the one hand, and on the
 other, the desire to minimize deallocation and re-allocation (or "thrashing") of
 swap files.
 
+![finite state machine](fsm.png)
+
 For those interested, here is a quick description of these states and their
 associated policies:
 
