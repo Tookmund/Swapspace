@@ -1,4 +1,4 @@
-AM_CFLAGS = --std=gnu99
+AM_CFLAGS = --std=gnu99 -DVARPREFIX='"$(localstatedir)"' -DETCPREFIX='"$(sysconfdir)"'
 
 sbin_PROGRAMS = swapspace
 swapspace_SOURCES = log.c main.c memory.c opts.c state.c support.c swaps.c
