@@ -240,6 +240,9 @@ static bool pfalloc_ok = true;
  */
 static unsigned int fstype = 0;
 
+/// Does the filesystem support the NOCOW attribute?
+static bool nocow_ok = true;
+
 /// Print status information to stdout
 void dump_stats(void)
 {
@@ -440,10 +443,26 @@ int set_no_cow(int fd)
   int err;
 
   err = ioctl(fd, FS_IOC_GETFLAGS, &attr);
-  if (err != 0) return err;
+  if (err != 0)
+  {
+    if (errno == ENOTSUP)
+    {
+      nocow_ok = false;
+      logm(LOG_NOTICE, "Filesystem does not support attributes!");
+    }
+    else return err;
+  }
   attr |= FS_NOCOW_FL;
   err = ioctl(fd, FS_IOC_SETFLAGS, &attr);
-  if (err != 0) return err;
+  if (err != 0)
+  {
+    if (errno == ENOTSUP)
+    {
+      nocow_ok = false;
+      logm(LOG_NOTICE, "NOCOW attribute not supported!");
+    }
+    else return err;
+  }
   return 0;
 }
 
@@ -500,8 +519,11 @@ static memsize_t make_swapfile(const char file[], memsize_t size)
     return 0;
   }
 
-  int err = set_no_cow(fd);
-  if (unlikely(err != 0)) log_perr_str(LOG_WARNING, "Could not disable COW", file, errno);
+  if (nocow_ok)
+  {
+    int err = set_no_cow(fd);
+    if (unlikely(err != 0)) log_perr_str(LOG_WARNING, "Could not disable COW", file, errno);
+  }
 
   specialfs(file);
 
