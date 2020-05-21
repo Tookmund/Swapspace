@@ -60,7 +60,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #define O_NOFOLLOW 0
 #endif
 
-static char swappath[PATH_MAX] = VARPREFIX"/var/lib/swapspace";
+static char swappath[PATH_MAX] = VARPREFIX"/lib/swapspace";
 static size_t swappath_len;
 
 

@@ -50,7 +50,7 @@ static const char copyright[] = "\n"
 
 
 #ifndef NO_CONFIG
-static char configfile[PATH_MAX] = ETCPREFIX"/etc/swapspace.conf";
+static char configfile[PATH_MAX] = ETCPREFIX"/swapspace.conf";
 
 static char *set_configfile(long long dummy)
 {
