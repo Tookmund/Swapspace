@@ -232,7 +232,13 @@ static struct Swapfile swapfiles[MAX_SWAPFILES+1];
 /// Have we been able to verify that /proc/swaps is in the expected format?
 static bool proc_swaps_read_ok = false;
 
+/// Can we allocate swapfiles using posix_allocate on this filesystem?
+static bool pfalloc_ok = true;
 
+/* Store filesystem type so we don't check everytime we allocate a swapfile
+ * __fsword_t is a glibc-internal type, but the docs claim unsigned int is fine
+ */
+static unsigned int fstype = 0;
 
 /// Print status information to stdout
 void dump_stats(void)
@@ -320,9 +326,6 @@ memsize_t swapfs_size(void)
   return fs_size(fsinfo.f_blocks, fsinfo.f_bsize);
 }
 
-/// If we can allocate swapfiles using posix_allocate on this filesystem
-bool canpfalloc = true;
-
 /// Turn an existing file into an active swap.  Clobbers localbuf.
 /**
  * @return Whether file was activated successfully.
@@ -359,7 +362,7 @@ static memsize_t write_data(int fd, memsize_t bytes, bool persevere)
   bytes = ext_to_page(bytes);
 #ifdef HAVE_PFALLOCATE
  // Have posix_fallocate().  Much faster way of getting the file populated.
- if (canpfalloc && posix_fallocate(fd, 0, bytes) == 0) return bytes;
+ if (pfalloc_ok && posix_fallocate(fd, 0, bytes) == 0) return bytes;
  // We have no error backchannel here, so on failure, try the old way.
 #endif
   /* Zero buffer before using it to write data to swapfile.  This doesn't do
@@ -444,10 +447,6 @@ int set_no_cow(int fd)
   return 0;
 }
 
-/* Store filesystem type so we don't check everytime we allocate a swapfile
- * __fsword_t is a glibc-internal type, but the docs claim unsigned int is fine
- */
-unsigned int fstype = 0;
 
 /// Handle filesystem-specific operations needed for swapfiles
 /* Some filesystems, like BTRFS, require special operations to be performed on
@@ -865,11 +864,11 @@ bool alloc_swapfile(memsize_t size)
   {
     unlink(file);
     swapfiles[newswap].size = 0;
-    if (canpfalloc && errno == EINVAL)
+    if (pfalloc_ok && errno == EINVAL)
     {
       logm(LOG_NOTICE, "Quick swapfile creation disabled.");
       // If we get EINVAL, then we can't actually use posix_fallocate
-      canpfalloc = false;
+      pfalloc_ok = false;
       // Try again
       return alloc_swapfile(size-2*getpagesize());
     }
