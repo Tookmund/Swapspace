@@ -8,7 +8,7 @@ swapfile!**
 
 Where to start
 --------------
-If you cloned this repo be sure to run `autoreconf` to make the configure script.
+If you cloned this repo be sure to run `autoreconf -i` to make the configure script.
 If you downloaded a tarball from github the configure script should be there
 already.
 For detailed installation instructions see `INSTALL`, but it usually just
