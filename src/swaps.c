@@ -3,7 +3,7 @@ This file is part of Swapspace.
 
 Copyright (C) 2005,2006, Software Industry Industry Promotion Agency (SIPA)
 Copyright (C) 2010, Jeroen T. Vermeulen
-Copyright (C) 2019, Jacob Adams
+Copyright (C) 2019,2021, Jacob Adams
 Written by Jeroen T. Vermeulen.
 
 Swapspace is free software; you can redistribute it and/or modify
@@ -181,27 +181,69 @@ bool to_swapdir(void)
     return false;
   }
 #endif
+  return swapdir_config();
+}
+
+
+/// Configure permissions and attributes correctly on the swap directory
+bool swapdir_config(void) {
+  int fd = open(swappath, O_RDONLY);
+  if (fd < 0) {
+    log_perr(LOG_ERR, "Unable to open swap directory", errno);
+	return false;
+  }
   struct stat swapdirstat;
   mode_t mode = S_IFDIR | S_IRUSR | S_IWUSR | S_IXUSR;
-  if (stat(swappath, &swapdirstat) < 0)
+  if (fstat(fd, &swapdirstat) < 0)
   {
-    log_perr(LOG_ERR, "Unable to stat swap path", errno);
+    log_perr(LOG_ERR, "Unable to stat swap directory", errno);
     return false;
   }
   if (swapdirstat.st_mode != mode)
   {
-    logm(LOG_WARNING, "Swap file directory permissions wrong, fixing");
+    logm(LOG_WARNING, "Swap directory permissions wrong, fixing");
     if (verbose)
     {
       logm(LOG_DEBUG, "Actual: %o\nExpected: %o", swapdirstat.st_mode, mode);
     }
     if (chmod(swappath, mode) < 0)
     {
-      log_perr(LOG_ERR, "Unable to change swap file directory permissions", errno);
+      log_perr(LOG_ERR, "Unable to change swap directory permissions", errno);
       return false;
     }
   }
 
+  int curattr;
+  int err = ioctl(fd, FS_IOC_GETFLAGS, &curattr);
+  // Don't worry about attributes if they're not supported
+  if (err != 0 && errno != ENOTSUP)
+  {
+    log_perr(LOG_NOTICE, "Unable to get swap path attributes, "
+			"may not be able to create swap files", errno);
+    return true;
+  }
+
+  int newattr = curattr;
+
+  // Unset compression, if set
+  if (curattr & FS_COMPR_FL) newattr &= ~FS_COMPR_FL;
+  // Ensure NOCOW is set, though only needed for btrfs
+  newattr |= FS_NOCOW_FL;
+
+  if (newattr != curattr)
+  {
+    if (verbose)
+    {
+      logm(LOG_DEBUG, "Swap directory attributes wrong\n"
+			  "Actual: %o\nExpected: %o", curattr, newattr);
+    }
+    err = ioctl(fd, FS_IOC_SETFLAGS, &newattr);
+    if (err != 0 && errno != ENOTSUP)
+    {
+      log_perr(LOG_NOTICE, "Unable to set NOCOW or unable to unset compression, "
+			  "may not be able to create swap files", errno);
+    }
+  }
   return true;
 }
 
@@ -234,14 +276,6 @@ static bool proc_swaps_read_ok = false;
 
 /// Can we allocate swapfiles using posix_allocate on this filesystem?
 static bool pfalloc_ok = true;
-
-/* Store filesystem type so we don't check everytime we allocate a swapfile
- * __fsword_t is a glibc-internal type, but the docs claim unsigned int is fine
- */
-static unsigned int fstype = 0;
-
-/// Does the filesystem support the NOCOW attribute?
-static bool nocow_ok = true;
 
 /// Print status information to stdout
 void dump_stats(void)
@@ -433,65 +467,6 @@ static memsize_t fill_swapfile(const char file[], int fd, memsize_t size)
   return bytes;
 }
 
-/// Ensure COW updates don't apply to swapfiles.
-/* Only needed to BTRFS and other COW filesystems.
- * But can't hurt to apply everywhere.
- */
-int set_no_cow(int fd)
-{
-  int attr;
-  int err;
-
-  err = ioctl(fd, FS_IOC_GETFLAGS, &attr);
-  if (err != 0)
-  {
-    if (errno == ENOTSUP)
-    {
-      nocow_ok = false;
-      logm(LOG_NOTICE, "Filesystem does not support attributes!");
-    }
-    else return err;
-  }
-  attr |= FS_NOCOW_FL;
-  err = ioctl(fd, FS_IOC_SETFLAGS, &attr);
-  if (err != 0)
-  {
-    if (errno == ENOTSUP)
-    {
-      nocow_ok = false;
-      logm(LOG_NOTICE, "NOCOW attribute not supported!");
-    }
-    else return err;
-  }
-  return 0;
-}
-
-
-/// Handle filesystem-specific operations needed for swapfiles
-/* Some filesystems, like BTRFS, require special operations to be performed on
- * files before they can be used as swapfiles
- * Clobbers localbuf if special operations are performed
- */
-void specialfs(const char path[])
-{
-  int err;
-  /* All swapfiles exist on the same filesystem, so we should only need to
-   * call this once
-   */
-  if (fstype == 0)
-  {
-    struct statfs buf;
-    err = statfs(path, &buf);
-    if (err == 0) fstype = buf.f_type;
-    else log_perr_str(LOG_WARNING, "Could not detect filesystem", path, errno);
-  }
-  if (fstype == BTRFS_SUPER_MAGIC)
-  {
-    err = runcommandformat("%s property set '%s' compression none", "btrfs", path);
-    if (err != 0) logm(LOG_WARNING, "Could not disable BTRFS compression! Return Code: %d", err);
-  }
-}
-
 /// Create file to be used as swap.  Clobbers localbuf.
 /**
  * @param filename File to be created
@@ -518,14 +493,6 @@ static memsize_t make_swapfile(const char file[], memsize_t size)
     log_perr_str(LOG_ERR, "Could not create swapfile", file, errno);
     return 0;
   }
-
-  if (nocow_ok)
-  {
-    int err = set_no_cow(fd);
-    if (unlikely(err != 0)) log_perr_str(LOG_WARNING, "Could not disable COW", file, errno);
-  }
-
-  specialfs(file);
 
   if (unlikely(!fill_swapfile(file, fd, size)))
   {
