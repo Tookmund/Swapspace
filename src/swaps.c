@@ -213,34 +213,48 @@ bool swapdir_config(void) {
     }
   }
 
-  int curattr;
-  int err = ioctl(fd, FS_IOC_GETFLAGS, &curattr);
-  // Don't worry about attributes if they're not supported
-  if (err != 0 && errno != ENOTSUP)
+  int attr;
+  int err = ioctl(fd, FS_IOC_GETFLAGS, &attr);
+  if (err != 0)
   {
-    log_perr(LOG_NOTICE, "Unable to get swap path attributes, "
+    // Don't worry about attributes if they're not supported
+    if(errno != ENOTSUP)
+    {
+      log_perr(LOG_NOTICE, "Unable to get swap path attributes, "
 			"may not be able to create swap files", errno);
+    }
     return true;
   }
 
-  int newattr = curattr;
 
   // Unset compression, if set
-  if (curattr & FS_COMPR_FL) newattr &= ~FS_COMPR_FL;
-  // Ensure NOCOW is set, though only needed for btrfs
-  newattr |= FS_NOCOW_FL;
-
-  if (newattr != curattr)
+  if (attr & FS_COMPR_FL)
   {
     if (verbose)
     {
-      logm(LOG_DEBUG, "Swap directory attributes wrong\n"
-			  "Actual: %o\nExpected: %o", curattr, newattr);
+      logm(LOG_NOTICE, "Compression set on swap directory, fixing");
     }
-    err = ioctl(fd, FS_IOC_SETFLAGS, &newattr);
+    attr &= ~FS_COMPR_FL;
+    err = ioctl(fd, FS_IOC_SETFLAGS, &attr);
     if (err != 0 && errno != ENOTSUP)
     {
-      log_perr(LOG_NOTICE, "Unable to set NOCOW or unable to unset compression, "
+      log_perr(LOG_NOTICE, "Unable to unset compression, "
+			  "may not be able to create swap files", errno);
+    }
+  }
+
+  // Ensure NOCOW is set, though only needed for btrfs
+  if (!(attr & FS_NOCOW_FL))
+  {
+    if (verbose)
+    {
+      logm(LOG_NOTICE, "NOCOW not set on swap directory, fixing");
+    }
+    attr |= FS_NOCOW_FL;
+    err = ioctl(fd, FS_IOC_SETFLAGS, &attr);
+    if (err != 0 && errno != ENOTSUP)
+    {
+      log_perr(LOG_NOTICE, "Unable to set NOCOW, "
 			  "may not be able to create swap files", errno);
     }
   }
