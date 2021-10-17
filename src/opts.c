@@ -41,6 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 static const char copyright[] = "\n"
       "Copyright (c) 2004-2006 Software Industry Promotion Agency of Thailand\n"
       "Copyright (c) 2010 Jeroen T. Vermeulen\n"
+      "Copyright (c) 2014-2021 Jacob Adams\n"
       "Written by Jeroen T. Vermeulen\n"
       "This program is free software, and is available for use under the GNU\n"
       "General Public License (GPL).\n"
