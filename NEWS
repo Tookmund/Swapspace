@@ -1,3 +1,9 @@
+v1.18
+=====
++ Support BTRFS via inode attributes
++ Handle misconfiguration of inode attributes on swapfile directory
++ Use available memory provided by the kernel if present
+
 v1.17
 =====
 + Automatically fall back to slow swapfiles, removing --zero manual option
