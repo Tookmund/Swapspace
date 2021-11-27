@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([swapspace], [1.17], [jacob@tookmund.com],[swapspace],[https://github.com/Tookmund/swapspace])
+AC_INIT([swapspace], [1.18], [jacob@tookmund.com],[swapspace],[https://github.com/Tookmund/swapspace])
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([src])
 AC_CONFIG_HEADERS([src/config.h])
