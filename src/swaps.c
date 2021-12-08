@@ -55,7 +55,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #define O_LARGEFILE 0
 #endif
 
-// Don't follow symlinks, if possible; they may pose a security risk 
+// Don't follow symlinks, if possible; they may pose a security risk
 #ifndef O_NOFOLLOW
 #define O_NOFOLLOW 0
 #endif
@@ -168,6 +168,8 @@ bool to_swapdir(void)
     logm(LOG_CRIT, "Swap path too long");
     return false;
   }
+
+  swappath_len = strlen(swappath);
 
   // Remove trailing slash, if any
   if (swappath[swappath_len-1] == '/')
@@ -496,7 +498,7 @@ void specialfs(const char path[])
 /**
  * @param filename File to be created
  * @param size Desired size in bytes (but already rounded to page size)
- * @return Size of new swapfile, which may differ from requested size.  Zero 
+ * @return Size of new swapfile, which may differ from requested size.  Zero
  * indicates failure, in which case the file is deleted.
  */
 static memsize_t make_swapfile(const char file[], memsize_t size)
@@ -533,7 +535,7 @@ static memsize_t make_swapfile(const char file[], memsize_t size)
     unlink(file);
   }
   close(fd);
-  
+
   return size;
 }
 
@@ -595,7 +597,7 @@ bool activate_old_swaps(void)
 #ifndef NO_CONFIG
       if (!quiet) logm(LOG_INFO, "Found old swapfile '%d'", seqno);
 #endif
-      const memsize_t size = filesize(d->d_name); 
+      const memsize_t size = filesize(d->d_name);
       if (likely(size > min_swapsize && enable_swapfile(d->d_name)))
       {
 	swapfiles[seqno].size = size;
