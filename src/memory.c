@@ -39,7 +39,7 @@ static int lower_freelimit=20;
 /// Upper bound to percentage of memory/swap space kept available
 static int upper_freelimit=60;
 
-/// Configuration item: target percentage of available space after adding swap 
+/// Configuration item: target percentage of available space after adding swap
 static int freetarget=30;
 
 /// Configuration item: what percentage of buffer space do we consider "free"?
@@ -49,6 +49,10 @@ static int buffer_elasticity=30;
 // TODO: Any way of detecting actual cache flexibility or minimum size?
 /// Configuration item: what percentage of cache space do we consider "free"?
 static int cache_elasticity=80;
+
+// Configuration item: simply trust /proc/meminfo:MemAvailable for the
+// free estimate.
+static bool trust_kernel_mem_available = false;
 
 #ifndef NO_CONFIG
 char *set_freetarget(long long pct)
@@ -74,6 +78,11 @@ char *set_buffer_elasticity(long long pct)
 char *set_cache_elasticity(long long pct)
 {
   cache_elasticity = (int)pct;
+  return NULL;
+}
+char *set_trust_kernel_mem_available(long long dummy)
+{
+  trust_kernel_mem_available = true;
   return NULL;
 }
 
@@ -204,6 +213,7 @@ struct memstate
 {
   memsize_t MemTotal,
 	    MemFree,
+	    MemAvailable,
 	    Buffers,
 	    Cached,
 	    Dirty,
@@ -233,6 +243,7 @@ void imbibe_meminfo_entry(const struct meminfo_item *inf, struct memstate *st)
     {
       if (strcmp(inf->entry+3, "Total")==0)       st->MemTotal = inf->value;
       else if (strcmp(inf->entry+3, "Free")==0)   st->MemFree = inf->value;
+      else if (strcmp(inf->entry+3, "Available")==0)   st->MemAvailable = inf->value;
     }
     break;
   case 'S':
@@ -268,7 +279,7 @@ static bool read_proc_meminfo(struct memstate *s)
     log_perr(LOG_ERR, inf.entry, inf.value);
     return false;
   }
- 
+
   if (unlikely(!s->MemTotal))
   {
     logm(LOG_ERR,
@@ -345,11 +356,15 @@ static inline memsize_t space_free(const struct memstate *st)
    * Pressure") which says how much of the non-dirty part of Cache should be
    * considered in-use.
    */
-  return st->MemFree +
-    st->SwapFree +
-    st->SwapCached +
-    buffers_free(st) +
-    cache_free(st);
+  if (trust_kernel_mem_available) {
+    return st->MemAvailable + st->SwapFree;
+  } else {
+    return st->MemFree +
+      st->SwapFree +
+      st->SwapCached +
+      buffers_free(st) +
+      cache_free(st);
+  }
 }
 
 static inline memsize_t space_total(const struct memstate *st)
@@ -396,11 +411,11 @@ static memsize_t ideal_swapsize(memsize_t totalspace, memsize_t freespace)
    * freespace and totalspace by some constant p, and multiplying by this same p
    * afterwards:
    *
-   *  x/p = (100*freespace/p - freetarget*totalspace/p) / (freetarget-100) 
+   *  x/p = (100*freespace/p - freetarget*totalspace/p) / (freetarget-100)
    *
-   * The natural choice for p is 100, since it gives up the exact minimum 
+   * The natural choice for p is 100, since it gives up the exact minimum
    * precision while ensuring that both 100*freespace/p and (given that
-   * freetarget<100) freetarget*totalspace/p remain within the range of 
+   * freetarget<100) freetarget*totalspace/p remain within the range of
    * representable numbers, assuming that freespace and totalspace were
    * themselves representable to begin with.
    *
@@ -500,5 +515,3 @@ void dump_memory(void)
       pf,
       upper_freelimit);
 }
-
-
