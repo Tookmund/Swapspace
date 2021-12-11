@@ -157,8 +157,6 @@ bool to_swapdir(void)
     return false;
   }
 
-  swappath_len = strlen(swappath);
-
 #ifndef NO_CONFIG
   // Get rid of any "/./", "//", and "/../" clutter that might be in swappath.
   // This is needed because we want to recognize our swapfiles in /proc/swaps,
@@ -182,6 +180,8 @@ bool to_swapdir(void)
     logm(LOG_ERR, "Not supported: swap path contains whitespace");
     return false;
   }
+#else
+  swappath_len = strlen(swappath);
 #endif
   return swapdir_config();
 }
