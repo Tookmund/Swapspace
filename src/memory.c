@@ -50,9 +50,8 @@ static int buffer_elasticity=30;
 /// Configuration item: what percentage of cache space do we consider "free"?
 static int cache_elasticity=80;
 
-// Configuration item: simply trust /proc/meminfo:MemAvailable for the
-// free estimate.
-static bool trust_kernel_mem_available = false;
+// Track whether MemAvailable is present in /proc/meminfo
+static bool kernel_mem_available = false;
 
 #ifndef NO_CONFIG
 char *set_freetarget(long long pct)
@@ -78,11 +77,6 @@ char *set_buffer_elasticity(long long pct)
 char *set_cache_elasticity(long long pct)
 {
   cache_elasticity = (int)pct;
-  return NULL;
-}
-char *set_trust_kernel_mem_available(long long dummy)
-{
-  trust_kernel_mem_available = true;
   return NULL;
 }
 
@@ -243,7 +237,11 @@ void imbibe_meminfo_entry(const struct meminfo_item *inf, struct memstate *st)
     {
       if (strcmp(inf->entry+3, "Total")==0)       st->MemTotal = inf->value;
       else if (strcmp(inf->entry+3, "Free")==0)   st->MemFree = inf->value;
-      else if (strcmp(inf->entry+3, "Available")==0)   st->MemAvailable = inf->value;
+      else if (strcmp(inf->entry+3, "Available")==0)
+      {
+        kernel_mem_available = true;
+        st->MemAvailable = inf->value;
+      }
     }
     break;
   case 'S':
@@ -356,7 +354,7 @@ static inline memsize_t space_free(const struct memstate *st)
    * Pressure") which says how much of the non-dirty part of Cache should be
    * considered in-use.
    */
-  if (trust_kernel_mem_available) {
+  if (kernel_mem_available) {
     return st->MemAvailable + st->SwapFree;
   } else {
     return st->MemFree +

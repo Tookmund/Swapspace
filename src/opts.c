@@ -117,8 +117,6 @@ static const struct option options[] =
   "Suppress informational output" },
   { "swappath",		's', at_str,  1, PATH_MAX, set_swappath,
   "Create swapfiles in secure directory s" },
-  { "trust_mem_available", 't', at_none, 0, 0, set_trust_kernel_mem_available,
-  "Trust the value in /proc/meminfo:MemAvailable for the estimate of free space" },
   { "upper_freelimit",	'u', at_num,  0, 100, set_upper_freelimit,
   "Reduce swapspace if more than n% is free" },
   { "verbose",		'v', at_none, 0, 0, set_verbose,
