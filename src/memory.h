@@ -68,7 +68,6 @@ char *set_upper_freelimit(long long pct);
 char *set_freetarget(long long pct);
 char *set_buffer_elasticity(long long pct);
 char *set_cache_elasticity(long long pct);
-char *set_trust_kernel_mem_available(long long dummy);
 
 bool memory_check_config(void);
 #endif
