@@ -276,6 +276,12 @@ int main(int argc, char *argv[])
   close(STDIN_FILENO);
   setlocale(LC_ALL, "C");
 
+  // This ensures that we always flush output a line at a time.
+  // This is the default behavior when standard output is a TTY,
+  // but is instead block-buffered when it's a file.
+  // Standard error always defaults to unbuffered, so it is not changed.
+  setlinebuf(stdout);
+
   if (!configure(argc, argv)) return EXIT_FAILURE;
 
   if (unlikely(!read_proc_swaps()) ||
