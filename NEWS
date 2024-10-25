@@ -1,3 +1,7 @@
+v1.18.1
+=======
++ Ensure standard output is always line-buffered
+
 v1.18
 =====
 + Support BTRFS via inode attributes
