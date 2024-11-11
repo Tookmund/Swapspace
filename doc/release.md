@@ -1,8 +1,9 @@
 # Swapspace release process
 1. TEST! See below.
 2. Update version number in NEWS with new features and changes.
-3. Commit just the NEWS file as "Version x.xx"
+3. Commit just the NEWS file and the configure.ac version bump as "Version x.xx"
 4. Tag the previous commit as "vx.xx" and sign it using: `git tag -s vx.xx`
+	Include the changelog entries in the tag message
 
 ## Swapspace test scenarios
 
